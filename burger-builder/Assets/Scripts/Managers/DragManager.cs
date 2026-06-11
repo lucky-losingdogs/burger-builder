@@ -3,8 +3,6 @@ using UnityEngine.EventSystems;
 
 public class DragManager : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
-    [SerializeField] private float m_dragSpeed = 1.7f;
-
     private BoardRenderer m_boardRenderer;
     private Item m_currentItem;
 
@@ -40,18 +38,10 @@ public class DragManager : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (CheckRMB(eventData))
+        if (CheckRMB(eventData) || m_currentItem == null)
             return;
 
-        if (m_currentItem == null)
-            return;
-
-        //convert the mouse delta pos to world pos
-        Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(eventData.position);
-        mouseWorld.z = 0f;
-
-        //convert world pos to cell pos using the tilemap in board renderer
-        Vector3Int cellPos = m_boardRenderer.WorldToCell(mouseWorld);
+        Vector3Int cellPos = ConvertMouseToGrid(eventData);
 
         //if the position has changed, the new pos != the current/old pos
         //clear tiles, update pos and set tiles again with the new pos
@@ -73,8 +63,51 @@ public class DragManager : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        if (CheckRMB(eventData))
+        if (CheckRMB(eventData) || m_currentItem == null)
             return;
+
+        Vector3Int cellPos = ConvertMouseToGrid(eventData);
+
+        //clear first to prevent checking overlap on own tiles
+        m_boardRenderer.ClearTiles(m_currentItem);
+
+        //check if the item is overlapping when dropped
+        OverlappedTile dropOverlap = m_boardRenderer.CheckOverlappingTiles(m_currentItem, cellPos).Clone();
+        bool spaceFound = true;
+
+        if (dropOverlap.GetOverlapping())
+        {
+            //get the closest free space that can fit the cells in the item
+            spaceFound = m_boardRenderer.FindClosestFreeSpace(cellPos, m_currentItem, out Vector3Int freeSpace);
+            if (spaceFound)
+            {
+                //set the position and tiles to the closest free space
+                m_currentItem.SetPosition(freeSpace);
+            }
+            else
+            {
+                //if no space was found, move far off grid to count as a change in overlap
+                m_currentItem.SetPosition(new Vector3Int (999,999,999));
+            }
+
+            m_boardRenderer.SetTiles(m_currentItem);
+            //check for overlap where the item was moved to
+            //and restore the previously overlapped cells
+            OverlappedTile movedOverlap = m_boardRenderer.CheckOverlappingTiles(m_currentItem, freeSpace);
+            m_boardRenderer.UpdateOverlaps(dropOverlap, movedOverlap);
+
+            //if no space was found, clear the item
+            if (!spaceFound)
+                m_boardRenderer.ClearTiles(m_currentItem);
+        }
+        else
+            m_boardRenderer.SetTiles(m_currentItem);
+
+        if (spaceFound)
+        {
+            //clear the item if its been dropped off the grid
+            m_boardRenderer.CheckDroppedOnGrid(ConvertMouseToGrid(eventData), m_currentItem);
+        }
 
         m_currentItem = null;
     }
@@ -88,6 +121,16 @@ public class DragManager : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
             return false;
     }
 
+    private Vector3Int ConvertMouseToGrid(PointerEventData eventData)
+    {
+        //convert the mouse delta pos to world pos
+        Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(eventData.position);
+        mouseWorld.z = 0f;
+
+        //convert world pos to cell pos using the tilemap in board renderer
+        return m_boardRenderer.WorldToCell(mouseWorld);
+    }
+
     private void CheckOverlap(OverlappedTile overlap)
     {
         if (overlap.GetOverlapping())
@@ -97,49 +140,4 @@ public class DragManager : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
     }
 
     #endregion
-
-    //clamps the movement of the draggable to the bounds of the bg/screen
-    //public Vector2 ClampToBounds(Vector2 targetPos, RectTransform item)
-    //{
-    //    //bounds panel corners
-    //    Vector3[] panelCorners = new Vector3[4];
-    //    m_defaultPanel.GetWorldCorners(panelCorners);
-
-    //    //get the draggable corners
-    //    Vector3[] itemCorners = new Vector3[4];
-    //    item.GetWorldCorners(itemCorners);
-
-    //    float itemWidth = itemCorners[2].x - itemCorners[0].x;
-    //    float itemHeight = itemCorners[2].y - itemCorners[0].y;
-
-    //    //convert target position to world position
-    //    Vector3 worldPos = item.parent.TransformPoint(targetPos);
-
-    //    //adjust bounds to account for item size + pivot
-    //    float minX = panelCorners[0].x + itemWidth * (item.pivot.x * 1.5f);
-    //    float maxX = panelCorners[2].x - itemWidth * (1 - (item.pivot.x / 1.5f));
-
-    //    float minY = panelCorners[0].y + itemHeight * (item.pivot.y * 1.5f);
-    //    float maxY = panelCorners[2].y - itemHeight * (1 - (item.pivot.y / 1.5f));
-
-    //    //clamp the position that the item can be moved to
-    //    //to prevent leaving bounds
-    //    worldPos.x = Mathf.Clamp(worldPos.x, minX, maxX);
-    //    worldPos.y = Mathf.Clamp(worldPos.y, minY, maxY);
-
-    //    return item.parent.InverseTransformPoint(worldPos);
-    //}
-
-    //private void SnapToGrid(Draggable draggable)
-    //{
-    //    RectTransform rect = draggable.GetComponent<RectTransform>();
-    //    Vector2 gridLengths = m_gridGenerator.GetGridWorldSize();
-
-    //    //if the item is dragged within the bounds of the grid
-    //    //snap the target pos to match the grid
-    //    if (GridSnapping.CheckBoxInBounds(rect, m_gridRect,gridLengths))
-    //    {
-    //        rect.position = GridSnapping.GetGridPosition(rect.position, m_gridRect, m_cellSize, m_snapTolerance);
-    //    }
-    //}
 }

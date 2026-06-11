@@ -51,7 +51,6 @@ public class ItemSpawner : MonoBehaviour, IPointerClickHandler
 
         //add to board's list of items and add tiles
         boardRenderer.SetTiles(item);
-        boardRenderer.AddItem(item);
     }
 
     //prevent more item spawns until cooldown is completed
