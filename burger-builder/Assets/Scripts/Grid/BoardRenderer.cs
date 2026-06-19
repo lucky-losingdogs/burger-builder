@@ -1,9 +1,8 @@
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using UnityEngine.UIElements;
-using static UnityEditor.Progress;
 
 public class BoardRenderer : MonoBehaviour
 {
@@ -15,6 +14,8 @@ public class BoardRenderer : MonoBehaviour
 
     private ItemMap m_itemMap = new ItemMap();
     private OverlappedTile m_currentOverlap = new OverlappedTile();
+
+    private bool m_itemInUse = false;
 
     private void Awake()
     {
@@ -51,7 +52,6 @@ public class BoardRenderer : MonoBehaviour
             m_tilemap.SetTile(position, null);
             //clear from item map
             m_itemMap.RemoveTile(position, item);
-            Destroy(item.gameObject);
         }
     }
 
@@ -76,6 +76,8 @@ public class BoardRenderer : MonoBehaviour
     //and change the overlapping cells to ghost tiles to indicate overlap
     public OverlappedTile CheckOverlappingTiles(Item item, Vector3Int position)
     {
+        m_itemInUse = true;
+        
         OverlappedTile overlap = new OverlappedTile();
 
         foreach (Vector3Int cell in item.GetCells())
@@ -92,6 +94,8 @@ public class BoardRenderer : MonoBehaviour
 
         UpdateOverlaps(m_currentOverlap, overlap);
         m_currentOverlap = overlap;
+
+        m_itemInUse = false;
 
         return overlap;
     }
@@ -126,9 +130,20 @@ public class BoardRenderer : MonoBehaviour
         }
     }
 
+    public IEnumerator C_WaitDestroyItem(Item item)
+    {
+        yield return new WaitWhile(ItemInUse);
+        Destroy(item.gameObject);
+        m_itemInUse = false;
+    }
+
+    private bool ItemInUse() { return m_itemInUse; }
+
     public OverlappedTile GetCurrentOverlap() { return m_currentOverlap; }
 
     public Vector3Int WorldToCell(Vector3 vect3) { return m_tilemap.WorldToCell(vect3); }
+
+    public ItemMap GetItemMap() { return m_itemMap; }
 
     #endregion
 
@@ -151,6 +166,7 @@ public class BoardRenderer : MonoBehaviour
             {
                 ClearTiles(item);
                 CheckOverlappingTiles(item, position);
+                StartCoroutine(C_WaitDestroyItem(item));
                 return;
             }
         }
@@ -176,11 +192,13 @@ public class BoardRenderer : MonoBehaviour
             {
                 bool freeCells = false;
                 
-                //check if there is enough free cells to fit every cell in the item
+                //check if there are enough free cells to fit every cell in the item
                 foreach (Vector3Int cell in item.GetCells())
                 {
                     Vector3Int worldPos = cell + currentTile;
 
+                    //check if the space is in bounds or has a tile there already
+                    //if there are any non free spaces, set freeeCells false and break early
                     if (!CheckInBounds(worldPos) || m_itemMap.CheckOccupiedTile(worldPos))
                     {
                         freeCells = false;

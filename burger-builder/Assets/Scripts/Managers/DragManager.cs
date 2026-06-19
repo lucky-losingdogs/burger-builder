@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using static UnityEditor.Progress;
 
 public class DragManager : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
@@ -66,47 +67,12 @@ public class DragManager : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
         if (CheckRMB(eventData) || m_currentItem == null)
             return;
 
-        Vector3Int cellPos = ConvertMouseToGrid(eventData);
+        CheckOverlapsOnDrop(eventData);
 
-        //clear first to prevent checking overlap on own tiles
-        m_boardRenderer.ClearTiles(m_currentItem);
-
-        //check if the item is overlapping when dropped
-        OverlappedTile dropOverlap = m_boardRenderer.CheckOverlappingTiles(m_currentItem, cellPos).Clone();
-        bool spaceFound = true;
-
-        if (dropOverlap.GetOverlapping())
+        TicketData currentTicket = TicketManager.GetCurrentTicket();
+        if (currentTicket != null)
         {
-            //get the closest free space that can fit the cells in the item
-            spaceFound = m_boardRenderer.FindClosestFreeSpace(cellPos, m_currentItem, out Vector3Int freeSpace);
-            if (spaceFound)
-            {
-                //set the position and tiles to the closest free space
-                m_currentItem.SetPosition(freeSpace);
-            }
-            else
-            {
-                //if no space was found, move far off grid to count as a change in overlap
-                m_currentItem.SetPosition(new Vector3Int (999,999,999));
-            }
-
-            m_boardRenderer.SetTiles(m_currentItem);
-            //check for overlap where the item was moved to
-            //and restore the previously overlapped cells
-            OverlappedTile movedOverlap = m_boardRenderer.CheckOverlappingTiles(m_currentItem, freeSpace);
-            m_boardRenderer.UpdateOverlaps(dropOverlap, movedOverlap);
-
-            //if no space was found, clear the item
-            if (!spaceFound)
-                m_boardRenderer.ClearTiles(m_currentItem);
-        }
-        else
-            m_boardRenderer.SetTiles(m_currentItem);
-
-        if (spaceFound)
-        {
-            //clear the item if its been dropped off the grid
-            m_boardRenderer.CheckDroppedOnGrid(ConvertMouseToGrid(eventData), m_currentItem);
+            currentTicket.CheckItemPositions(m_boardRenderer.GetItemMap());
         }
 
         m_currentItem = null;
@@ -136,6 +102,53 @@ public class DragManager : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
         if (overlap.GetOverlapping())
         {
             m_boardRenderer.SetGhostTile(overlap.GetPositions());
+        }
+    }
+
+    private void CheckOverlapsOnDrop(PointerEventData eventData)
+    {
+        Vector3Int cellPos = ConvertMouseToGrid(eventData);
+
+        //clear first to prevent checking overlap on own tiles
+        m_boardRenderer.ClearTiles(m_currentItem);
+
+        //check if the item is overlapping when dropped
+        OverlappedTile dropOverlap = m_boardRenderer.CheckOverlappingTiles(m_currentItem, cellPos).Clone();
+        bool spaceFound = true;
+
+        if (dropOverlap.GetOverlapping())
+        {
+            //get the closest free space that can fit the cells in the item
+            spaceFound = m_boardRenderer.FindClosestFreeSpace(cellPos, m_currentItem, out Vector3Int freeSpace);
+            if (spaceFound)
+            {
+                //set the position and tiles to the closest free space
+                m_currentItem.SetPosition(freeSpace);
+            }
+            else
+            {
+                //if no space was found, move far off grid to count as a change in overlap
+                m_currentItem.SetPosition(new Vector3Int(999, 999, 999));
+            }
+
+            m_boardRenderer.SetTiles(m_currentItem);
+            //check for overlap where the item was moved to
+            //and restore the previously overlapped cells
+            OverlappedTile movedOverlap = m_boardRenderer.CheckOverlappingTiles(m_currentItem, freeSpace);
+            m_boardRenderer.UpdateOverlaps(dropOverlap, movedOverlap);
+        }
+        else
+            m_boardRenderer.SetTiles(m_currentItem);
+
+        if (spaceFound)
+        {
+            //clear the item if its been dropped off the grid
+            m_boardRenderer.CheckDroppedOnGrid(ConvertMouseToGrid(eventData), m_currentItem);
+        }
+        else //if no space was found, clear the item
+        {
+            m_boardRenderer.ClearTiles(m_currentItem);
+            StartCoroutine(m_boardRenderer.C_WaitDestroyItem(m_currentItem));
         }
     }
 
