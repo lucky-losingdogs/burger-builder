@@ -5,10 +5,12 @@ public class TicketUI : MonoBehaviour
 {
     [SerializeField] private Image m_icon;
     private Transform m_parent;
+    private TicketData m_data;
 
-    public void Populate(Sprite sprite, Transform parent)
+    public void Populate(TicketData data, Transform parent)
     {
-        m_icon.sprite = sprite;
+        m_data = data;
+        m_icon.sprite = data.GetSprite();
         m_parent = parent;
     }
 
@@ -16,4 +18,6 @@ public class TicketUI : MonoBehaviour
     {
         transform.SetParent(m_parent, false);
     }
+
+    public TicketData GetData() { return m_data; }
 }

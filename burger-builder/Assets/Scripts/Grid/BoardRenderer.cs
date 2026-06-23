@@ -55,6 +55,12 @@ public class BoardRenderer : MonoBehaviour
         }
     }
 
+    public void ClearAllTiles()
+    {
+        m_tilemap.ClearAllTiles();
+        m_itemMap.ResetMap();
+    }
+
     //sets overlapping tiles to the ghost tile to indicate where overlapping tiles are
     public void SetGhostTile(List<Vector3Int> cellPositions)
     {
@@ -64,11 +70,15 @@ public class BoardRenderer : MonoBehaviour
         }
     }
 
-
     //return the top item at the tile position from the item map
     public Item CheckClickedItem(Vector3 cursorPos)
     {
         Vector3Int tilePos = WorldToCell(cursorPos);
+        return m_itemMap.GetTopItem(tilePos);
+    }
+
+    public Item CheckItem(Vector3Int tilePos)
+    {
         return m_itemMap.GetTopItem(tilePos);
     }
 
@@ -144,6 +154,10 @@ public class BoardRenderer : MonoBehaviour
     public Vector3Int WorldToCell(Vector3 vect3) { return m_tilemap.WorldToCell(vect3); }
 
     public ItemMap GetItemMap() { return m_itemMap; }
+
+    public int GetOccupiedTilesCount() { return m_itemMap.GetKeys().Count; }
+
+    public bool CheckOccupiedTile(Vector3Int pos) { return m_tilemap.HasTile(pos); }
 
     #endregion
 
@@ -264,8 +278,6 @@ public class ItemMap
             m_occupiedTiles.Remove(pos);
     }
 
-    public bool CheckOccupiedTile(Vector3Int pos) { return m_occupiedTiles.ContainsKey(pos); }
-
     public Item GetTopItem(Vector3Int pos)
     {
         if (!m_occupiedTiles.TryGetValue(pos, out List<Item> items) || items.Count == 0)
@@ -273,6 +285,13 @@ public class ItemMap
 
         return items[^1];
     }
+
+    public bool CheckOccupiedTile(Vector3Int pos) { return m_occupiedTiles.ContainsKey(pos); }
+
+    public Dictionary<Vector3Int, List<Item>>.KeyCollection GetKeys() { return m_occupiedTiles.Keys; }
+    public Dictionary<Vector3Int, List<Item>>.ValueCollection GetValues() { return m_occupiedTiles.Values; }
+
+    public void ResetMap() { m_occupiedTiles = new Dictionary<Vector3Int, List<Item>>(); }
 }
 
 //<summary>

@@ -68,12 +68,7 @@ public class DragManager : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
             return;
 
         CheckOverlapsOnDrop(eventData);
-
-        TicketData currentTicket = TicketManager.GetCurrentTicket();
-        if (currentTicket != null)
-        {
-            currentTicket.CheckItemPositions(m_boardRenderer.GetItemMap());
-        }
+        CheckCompletedTicket();
 
         m_currentItem = null;
     }
@@ -149,6 +144,16 @@ public class DragManager : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
         {
             m_boardRenderer.ClearTiles(m_currentItem);
             StartCoroutine(m_boardRenderer.C_WaitDestroyItem(m_currentItem));
+        }
+    }
+
+    private void CheckCompletedTicket()
+    {
+        TicketData currentTicket = TicketManager.GetCurrentTicket();
+        if (currentTicket != null)
+        {
+            if (currentTicket.CheckItemPositions(m_boardRenderer))
+                GameManager.s_instance.TicketCleared();
         }
     }
 

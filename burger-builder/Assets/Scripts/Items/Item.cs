@@ -40,14 +40,11 @@ public struct ItemStructure
         SetCells(shape);
     }
 
-    private void SetCells(ShapeData shape)
+    public void SetCells(ShapeData shape)
     {
         Vector2Int[] tempCells = shape.GetCells();
 
-        if (cells == null)
-        {
-            cells = new Vector3Int[tempCells.Length];
-        }
+        cells = new Vector3Int[tempCells.Length];
 
         for (int i = 0; i < tempCells.Length; i++)
         {
