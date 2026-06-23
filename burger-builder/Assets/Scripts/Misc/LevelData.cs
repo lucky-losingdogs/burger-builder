@@ -7,9 +7,6 @@ using System.Linq;
 using UnityEditor;
 #endif
 
-//TODO
-//shorten spawn interval over time + with harder lvls
-
 [CreateAssetMenu(fileName = "LevelData", menuName = "Scriptable Objects/LevelData")]
 public class LevelData : ScriptableObject
 {
@@ -17,9 +14,8 @@ public class LevelData : ScriptableObject
     [field: SerializeField] private int[] difficultyRange;
     [field: SerializeField] private float timeLimit;
     [field: SerializeField] private int maxTicketTotal; // the number of total tickets used in the level
-    [field: SerializeField] private bool reshuffle = false;
 
-    [field: SerializeField] private TicketData[] tickets;
+    [SerializeField] private TicketData[] tickets;
 
     public TicketData[] GetTickets() { return tickets; }
 
@@ -27,7 +23,6 @@ public class LevelData : ScriptableObject
 
     private void OnValidate()
     {
-        Reshuffle();
         UpdateTickets();
     }
 
@@ -76,15 +71,6 @@ public class LevelData : ScriptableObject
         }
 
         tickets = tempTickets.ToArray();
-    }
-
-    private void Reshuffle()
-    {
-        if (reshuffle)
-        {
-            tickets = Utilities.Shuffle(tickets.ToList()).ToArray();
-            reshuffle = false;
-        }
     }
 
 #endif

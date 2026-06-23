@@ -15,11 +15,10 @@ MonoBehaviour:
   difficultyRange: 0000000001000000
   timeLimit: 0
   maxTicketTotal: 6
-  reshuffle: 0
   tickets:
   - {fileID: 11400000, guid: 2a6bbd61a4c93014782f82834e3094a7, type: 2}
-  - {fileID: 11400000, guid: 2a6bbd61a4c93014782f82834e3094a7, type: 2}
   - {fileID: 11400000, guid: e53e4fa567a654b4ca0f3453f4fdc851, type: 2}
+  - {fileID: 11400000, guid: 2a6bbd61a4c93014782f82834e3094a7, type: 2}
   - {fileID: 11400000, guid: e53e4fa567a654b4ca0f3453f4fdc851, type: 2}
   - {fileID: 11400000, guid: e53e4fa567a654b4ca0f3453f4fdc851, type: 2}
   - {fileID: 11400000, guid: 2a6bbd61a4c93014782f82834e3094a7, type: 2}

@@ -2,9 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+//TODO
+//shorten spawn interval over time
+//ratio of total tickets
+
+
 public class TicketManager : MonoBehaviour
 {
     [SerializeField] private float m_spawnInterval = 10.0f;
+    [SerializeField] private float m_intervalDecrease = 0.3f;
 
     private TicketUIManager m_UIManager;
     private TicketData[] m_levelTickets;
@@ -45,6 +52,11 @@ public class TicketManager : MonoBehaviour
         m_UIManager.RemoveTicket();
         //set new current ticket
         StartCoroutine(C_SetCurrentTicket());
+    }
+
+    private void ChangeInterval()
+    {
+        //float newInternal = Mathf.Max(2.0, m_spawnInterval - m_intervalDecrease * elapsed time)
     }
 
     private IEnumerator C_SpawnTickets()

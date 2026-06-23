@@ -32,6 +32,9 @@ public class Utilities
 
     public static List<T> ExtendList<T>(List<T> list, int capacity) where T : UnityEngine.Object
     {
+        if (list.Count < 0)
+            return list;
+        
         List<T> tempList = new List<T>();
 
         int j = 0;
