@@ -149,7 +149,7 @@ public class DragManager : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
 
     private void CheckCompletedTicket()
     {
-        TicketData currentTicket = TicketManager.GetCurrentTicket();
+        TicketData currentTicket = GameManager.s_instance.GetCurrentTicket();
         if (currentTicket != null)
         {
             if (currentTicket.CheckItemPositions(m_boardRenderer))

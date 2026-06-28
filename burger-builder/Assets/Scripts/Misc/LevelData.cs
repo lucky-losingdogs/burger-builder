@@ -12,12 +12,15 @@ public class LevelData : ScriptableObject
 {
     [Range(0, 10)]
     [field: SerializeField] private int[] difficultyRange;
+    [Range(5.0f, 60.0f)]
     [field: SerializeField] private float timeLimit;
     [field: SerializeField] private int maxTicketTotal; // the number of total tickets used in the level
 
     [SerializeField] private TicketData[] tickets;
 
     public TicketData[] GetTickets() { return tickets; }
+
+    public float GetTimeLimit() { return timeLimit; }
 
 #if UNITY_EDITOR
 

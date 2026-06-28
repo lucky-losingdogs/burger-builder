@@ -17,7 +17,8 @@ public class GameManager : MonoBehaviour
     private TicketManager m_ticketManager;
     private BoardRenderer m_boardRenderer;
 
-    public event Action<LevelData> OnLevelStart;
+    public static event Action<LevelData> OnLevelStart;
+    public static event Action OnLevelEnd;
 
     private void Awake()
     {
@@ -34,8 +35,6 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        m_ticketManager.Enable();
-
         OnLevelStart?.Invoke(m_allLevels[m_currentLevel]);
     }
 
@@ -46,15 +45,35 @@ public class GameManager : MonoBehaviour
         m_boardRenderer.ClearAllTiles();
     }
 
-    public void AllTicketsCleared()
+    //triggered when next lvl button is pressed on win menu
+    public void HandleNextLevel()
     {
-        m_currentLevel++;
+        //increment the current lvl index
+        m_currentLevel = Mathf.Clamp(m_currentLevel++, 0, m_allLevels.Count - 1);
+        StartLevel();
     }
 
-    public void OutOfTime()
+    //triggered when retry lvl button is pressed on fail menu
+    public void HandleRetryLevel()
     {
-
+        StartLevel();
     }
+
+    private void StartLevel()
+    {
+        ClearLevel();
+        OnLevelStart?.Invoke(m_allLevels[m_currentLevel]);
+        GameUIManager.s_instance.ToggleBothMenus(false);
+    }
+
+    private void ClearLevel()
+    {
+        m_boardRenderer.ClearAllTiles();
+        m_ticketManager.ResetTickets();
+        OnLevelEnd?.Invoke();
+    }
+
+    public TicketData GetCurrentTicket() { return m_ticketManager.GetCurrentTicket(); }
 
 #if UNITY_EDITOR
 

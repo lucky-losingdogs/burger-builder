@@ -32,18 +32,14 @@ public class TicketUIManager : MonoBehaviour
         }
     }
 
-    //remove the first ticket in the list
-    public void RemoveTicket()
-    {
-        Destroy(m_tickets[0]);
-        m_tickets.RemoveAt(0);
-    }
-
     //find the first ticket in the list with the data and remove it
     public void RemoveTicket(TicketData data)
     {
         foreach (GameObject ticket in m_tickets)
         {
+            if (ticket == null)
+                continue;
+
             TicketUI ticketUI = ticket.GetComponent<TicketUI>();
             if (ticketUI == null)
                 continue;
@@ -52,9 +48,28 @@ public class TicketUIManager : MonoBehaviour
             if (data == currentData)
             {
                 Destroy(ticket);
-                m_tickets.Remove(ticket);
                 return;
             }
         }
+    }
+
+    public void RemoveAllTickets()
+    {
+        foreach (GameObject ticket in m_tickets)
+        {
+            if (ticket == null)
+                continue;
+
+            Destroy(ticket);
+            m_tickets.Remove(ticket);
+        }
+
+        m_tickets = new List<GameObject>();
+    }
+
+    public int GetTicketCount()
+    {
+        Transform[] allChildren = m_ticketParent.GetComponentsInChildren<Transform>();
+        return allChildren.Length - 1;
     }
 }
