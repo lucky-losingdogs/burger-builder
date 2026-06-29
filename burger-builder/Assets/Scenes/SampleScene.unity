@@ -718,6 +718,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ticketPrefab: {fileID: 2564215139676011070, guid: 9ae4dcf719cf7e647aa1386e03e83ff7, type: 3}
   m_ticketParent: {fileID: 64569681}
+  m_ticketSpawn: {fileID: 1106955764}
   m_ticketParentRect: {fileID: 64569681}
   m_canvas: {fileID: 2097033523}
   m_slideDuration: 0.7
