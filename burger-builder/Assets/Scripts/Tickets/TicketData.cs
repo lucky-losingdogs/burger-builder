@@ -9,6 +9,8 @@ public class TicketData : ScriptableObject
 {
     [field: SerializeField] private ItemStructure[] ticketItems;
     [field: SerializeField] private Sprite sprite;
+    [field: SerializeField] private Sprite diagramSprite;
+    [Range(0, 10)]
     [field: SerializeField] private int difficulty;
 
     public bool CheckItemPositions(BoardRenderer boardRenderer)
@@ -22,8 +24,8 @@ public class TicketData : ScriptableObject
             //check if the item map contains an item at the required position
             Item item = boardRenderer.CheckItem(ticketItems[i].position);
 
-            //check if the shape of the item on the map matches the required item
-            if (item != null && ticketItems[i].shape == item.GetShape())
+            //check if the shape of the item on the map matches the required item & required rotation
+            if (item != null && ticketItems[i].shape == item.GetShape() && ticketItems[i].rotation == item.GetRotation())
             {
                 matches++;
 
@@ -40,7 +42,7 @@ public class TicketData : ScriptableObject
     }
 
     public Sprite GetSprite() { return sprite; }
-    
+    public Sprite GetDiagram() { return diagramSprite; }
     public int GetDifficulty() { return difficulty; }
 
 #if UNITY_EDITOR

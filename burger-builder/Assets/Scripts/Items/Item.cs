@@ -17,11 +17,18 @@ public class Item : MonoBehaviour
 
     public ShapeData GetShape() { return m_structure.shape; }
 
-    public Vector3Int[] GetCells() { return m_structure.cells; }
+    public Vector3Int[] GetCells() { return m_structure.RotateCells(m_structure.rotation); }
 
     public Vector3Int GetPosition() { return m_structure.position; }
 
     public void SetPosition(Vector3Int newPos) { m_structure.position = newPos; }
+
+    public int GetRotation() { return m_structure.rotation; }
+
+    public void Rotate(bool clockwise)
+    {
+        m_structure.Rotate(clockwise);
+    }
 
     #endregion
 }
@@ -32,6 +39,7 @@ public struct ItemStructure
     public ShapeData shape;
     public Vector3Int[] cells;
     public Vector3Int position;
+    public int rotation;
 
     public void Initialise(ShapeData shape, Vector3Int position)
     {
@@ -50,5 +58,26 @@ public struct ItemStructure
         {
             cells[i] = (Vector3Int)tempCells[i];
         }
+    }
+
+    public void Rotate(bool clockwise)
+    {
+        //if rotation direction is pos, clockwise rotation
+        if (clockwise)
+            rotation = (rotation + 1) % 4;
+        else
+            rotation = (rotation + 3) % 4;
+    }
+
+    public Vector3Int[] RotateCells(int clockwise)
+    {
+        Vector3Int[] rotatedCells = new Vector3Int[cells.Length];
+
+        for (int i = 0; i < cells.Length; i++)
+        {
+            rotatedCells[i] = Data.RotateCell(cells[i], clockwise);
+        }
+
+        return rotatedCells;
     }
 }

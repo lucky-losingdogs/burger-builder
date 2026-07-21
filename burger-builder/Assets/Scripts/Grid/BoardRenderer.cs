@@ -17,11 +17,15 @@ public class BoardRenderer : MonoBehaviour
 
     private bool m_itemInUse = false;
 
+    #region Set Up
+
     private void Awake()
     {
         m_tilemap = GetComponentInChildren<Tilemap>();
         m_bounds = CalculateBounds();
     }
+
+    #endregion
 
     #region Tile Rendering
 

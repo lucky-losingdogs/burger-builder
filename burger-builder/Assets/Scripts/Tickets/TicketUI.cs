@@ -4,19 +4,17 @@ using UnityEngine.UI;
 public class TicketUI : MonoBehaviour
 {
     [SerializeField] private Image m_icon;
-    private Transform m_parent;
     private TicketData m_data;
 
-    public void Populate(TicketData data, Transform parent)
+    public void Populate(TicketData data)
     {
         m_data = data;
         m_icon.sprite = data.GetSprite();
-        m_parent = parent;
     }
 
-    public void SetParent()
+    public void SetSprite(Sprite sprite)
     {
-        transform.SetParent(m_parent, false);
+        m_icon.sprite = sprite;
     }
 
     public TicketData GetData() { return m_data; }

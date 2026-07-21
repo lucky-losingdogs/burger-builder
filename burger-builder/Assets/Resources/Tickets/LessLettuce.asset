@@ -20,5 +20,7 @@ MonoBehaviour:
     - {x: 1, y: 1, z: 0}
     - {x: 2, y: 1, z: 0}
     position: {x: -2, y: -2, z: 0}
+    rotation: 0
   sprite: {fileID: 21300000, guid: eb1e237a70feb6349b65f494694a87f3, type: 3}
+  diagramSprite: {fileID: 21300000, guid: ec77da10799d42d46af7f2f25b78245c, type: 3}
   difficulty: 1

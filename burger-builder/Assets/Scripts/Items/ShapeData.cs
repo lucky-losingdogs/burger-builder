@@ -2,27 +2,34 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using System;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 [CreateAssetMenu(fileName = "ShapeData", menuName = "Scriptable Objects/ShapeData")]
 public class ShapeData : ScriptableObject
 {
     [field: SerializeField] private Tile tile;
-    [field: SerializeField] private Shapes shape;
+    [field: SerializeField] private Tile ghostTile;
+    [field: SerializeField] private Ingredients ingredient;
+    [SerializeField] private Vector2Int[] cells;
 
     public Tile GetTile() { return tile; }
+    public Tile GetGhostTile() { return ghostTile; }
+    public Vector2Int[] GetCells() { return cells; }
 
-    public Shapes GetShape() { return shape; }
 
-    public Vector2Int[] GetCells() { return shape.cells; }
-}
+#if UNITY_EDITOR
 
-public enum Ingredients
-{ 
-    Bun, Beef, Lettuce, Onion
-}
+    private void OnValidate()
+    {
+        SetCells();
+    }
 
-[Serializable]
-public struct Shapes
-{
-    public Ingredients ingredient;
-    public Vector2Int[] cells;
+    private void SetCells()
+    {
+        Data.Cells0.TryGetValue(ingredient, out cells);
+    }
+
+#endif
 }

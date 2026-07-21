@@ -7,11 +7,25 @@ public class DragManager : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
     private BoardRenderer m_boardRenderer;
     private Item m_currentItem;
 
+    private bool m_rotating = false;
+
     #region Set Up
 
     private void Start()
     {
         m_boardRenderer = GetComponentInParent<BoardRenderer>();
+    }
+
+    private void OnEnable()
+    {
+        KeyboardManager.OnPreviousInput += RotateItemPrev;
+        KeyboardManager.OnNextInput += RotateItemNext;
+    }
+
+    private void OnDisable()
+    {
+        KeyboardManager.OnPreviousInput -= RotateItemPrev;
+        KeyboardManager.OnNextInput -= RotateItemNext;
     }
 
     #endregion
@@ -39,7 +53,7 @@ public class DragManager : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (CheckRMB(eventData) || m_currentItem == null)
+        if (CheckRMB(eventData) || m_currentItem == null || m_rotating)
             return;
 
         Vector3Int cellPos = ConvertMouseToGrid(eventData);
@@ -48,17 +62,7 @@ public class DragManager : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
         //clear tiles, update pos and set tiles again with the new pos
         if (m_currentItem.GetPosition() != cellPos)
         {
-            //clear first to prevent checking overlap on own tiles
-            m_boardRenderer.ClearTiles(m_currentItem);
-
-            //check overlap before setting the new position
-            OverlappedTile overlap = m_boardRenderer.CheckOverlappingTiles(m_currentItem, cellPos);
-
-            m_currentItem.SetPosition(cellPos);
-            m_boardRenderer.SetTiles(m_currentItem);
-
-            //check overlap results and set ghost tiles on overlapped cells
-            CheckOverlap(overlap);
+            SetItem(cellPos);
         }
     }
 
@@ -80,6 +84,21 @@ public class DragManager : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
             return true;
         else
             return false;
+    }
+
+    private void SetItem(Vector3Int cellPos)
+    {
+        //clear first to prevent checking overlap on own tiles
+        m_boardRenderer.ClearTiles(m_currentItem);
+
+        //check overlap before setting the new position
+        OverlappedTile overlap = m_boardRenderer.CheckOverlappingTiles(m_currentItem, cellPos);
+
+        m_currentItem.SetPosition(cellPos);
+        m_boardRenderer.SetTiles(m_currentItem);
+
+        //check overlap results and set ghost tiles on overlapped cells
+        CheckOverlap(overlap);
     }
 
     private Vector3Int ConvertMouseToGrid(PointerEventData eventData)
@@ -145,6 +164,33 @@ public class DragManager : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
             m_boardRenderer.ClearTiles(m_currentItem);
             StartCoroutine(m_boardRenderer.C_WaitDestroyItem(m_currentItem));
         }
+    }
+
+    //subscribed to E keyboard key
+    private void RotateItemNext()
+    {
+        if (m_currentItem == null)
+            return;
+        Rotate(true);
+    }
+
+    //subscribed to Q keyboard key
+    private void RotateItemPrev()
+    {
+        if (m_currentItem == null)
+            return;
+        Rotate(false);
+    }
+
+    //rotate current item and reset on board
+    private void Rotate(bool clockwise)
+    {
+        //clear tiles before changing any cells so they're cleared properly
+        m_boardRenderer.ClearTiles(m_currentItem);
+        //change rotation value
+        m_currentItem.Rotate(clockwise);
+        //set item on board renderer
+        SetItem(m_currentItem.GetPosition());
     }
 
     private void CheckCompletedTicket()

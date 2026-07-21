@@ -6,8 +6,8 @@ public class TicketUIManager : MonoBehaviour
 {
     [Header ("Objects")]
     [SerializeField] private GameObject m_ticketPrefab;
-    [SerializeField] private Transform m_ticketParent;
-    [SerializeField] private Transform m_ticketSpawn;
+    [SerializeField] private Transform m_ticketParent01;
+    [SerializeField] private Transform m_ticketParent02;
     [SerializeField] private RectTransform m_ticketParentRect;
     [SerializeField] private Canvas m_canvas;
 
@@ -23,8 +23,10 @@ public class TicketUIManager : MonoBehaviour
     {
         if (m_ticketPrefab == null)
             Debug.LogError("Ticket prefab is null");
-        if (m_ticketParent == null)
-            Debug.LogError("Ticket parent is null");
+        if (m_ticketParent02 == null)
+            Debug.LogError("Ticket parent 2 is null");
+        if (m_ticketParent01 == null)
+            Debug.LogError("Ticket parent 1 is null");
 
         m_targetLeft = m_ticketParentRect.anchoredPosition.x - (m_ticketParentRect.rect.width * 0.5f);
     }
@@ -32,21 +34,28 @@ public class TicketUIManager : MonoBehaviour
     //spawn ticket UI and populate the UI using the data
     public void SpawnTicket(TicketData data)
     {
-        //spawn it in canvas so it isnt locked into the parent's group layout immediately
-        GameObject newTicket = Instantiate(m_ticketPrefab, m_ticketSpawn);
+        //spawn it in canvas so it isn't locked into the parent's group layout immediately
+        GameObject newTicket = Instantiate(m_ticketPrefab, m_ticketParent02);
+
         TicketUI ui = newTicket.GetComponent<TicketUI>();
         if (ui != null)
         { 
-            ui.Populate(data, m_ticketParent);
+            ui.Populate(data);
             m_tickets.Add(newTicket);
-            StartCoroutine(C_AnimateTicket(newTicket, m_targetLeft));
+            
+            if (m_tickets.Count == 1)
+                SetFirstTicket();
+            
+            //StartCoroutine(C_AnimateTicket(newTicket, m_targetLeft));
         }
     }
 
     //find the first ticket in the list with the data and remove it
     public void RemoveTicket(TicketData data)
     {
-        foreach (GameObject ticket in m_tickets)
+        List<GameObject> tempList = m_tickets;
+
+        foreach (GameObject ticket in tempList)
         {
             if (ticket == null)
                 continue;
@@ -59,6 +68,11 @@ public class TicketUIManager : MonoBehaviour
             if (data == currentData)
             {
                 Destroy(ticket);
+                m_tickets.Remove(ticket);
+
+                //set new first ticket in ui
+                if (m_tickets.Count > 0)
+                    SetFirstTicket();
                 return;
             }
         }
@@ -77,38 +91,16 @@ public class TicketUIManager : MonoBehaviour
         m_tickets = new List<GameObject>();
     }
 
-    public int GetTicketCount()
+    //set ticket to the main ui ticket
+    private void SetFirstTicket()
     {
-        Transform[] allChildren = m_ticketParent.GetComponentsInChildren<Transform>();
-        return allChildren.Length - 1;
-    }
-
-    private float RecalulcateTarget(RectTransform ticketRect, float targetX)
-    {
-        float ticketWidth = ticketRect.rect.width;
-
-        int ticketCount = GetTicketCount();
-        return targetX + (ticketCount * ticketWidth);
-    }
-
-    //calc destination/distance using num of present tickets
-    private IEnumerator C_AnimateTicket(GameObject ticket, float targetX)
-    {
-        RectTransform ticketRect = ticket.GetComponent<RectTransform>();
-
-        Vector2 startPos = ticketRect.anchoredPosition;
-        Vector2 targetPos = new Vector2(RecalulcateTarget(ticketRect, targetX), startPos.y);
-        float elapsedTime = 0f;
-
-        //lerp x position over time
-        while (elapsedTime < m_slideDuration)
+        GameObject currentTicket = m_tickets[0];
+        TicketUI ui = currentTicket.GetComponent<TicketUI>();
+        TicketData data = ui.GetData();
+        if (ui != null && data != null)
         {
-            elapsedTime += Time.unscaledDeltaTime;
-            ticketRect.anchoredPosition = Vector3.Lerp(startPos, targetPos, elapsedTime / m_slideDuration);
-            yield return null;
+            ui.SetSprite(data.GetDiagram());
+            currentTicket.transform.SetParent(m_ticketParent01);
         }
-
-        ticketRect.anchoredPosition = targetPos;
-        ticket.transform.SetParent(m_ticketParent);
     }
 }
