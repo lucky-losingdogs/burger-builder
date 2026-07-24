@@ -16,10 +16,14 @@ public class GameManager : MonoBehaviour
 
     private TicketManager m_ticketManager;
     private BoardRenderer m_boardRenderer;
+    private ComboManager m_comboManager;
 
     public static event Action<LevelData> OnLevelStart;
     public static event Action OnLevelEnd;
+    public static event Action OnLevelEndEarly;
 
+    #region Set Up
+    
     private void Awake()
     {
         if (s_instance != null)
@@ -31,6 +35,7 @@ public class GameManager : MonoBehaviour
         
         m_ticketManager = FindFirstObjectByType<TicketManager>();
         m_boardRenderer = FindFirstObjectByType<BoardRenderer>();
+        m_comboManager = FindFirstObjectByType<ComboManager>();
     }
 
     private void Start()
@@ -38,11 +43,24 @@ public class GameManager : MonoBehaviour
         OnLevelStart?.Invoke(m_allLevels[m_currentLevel]);
     }
 
+    private void OnEnable()
+    {
+        Timer.OnTimerFinished += HandleTimerFinished;
+    }
+
+    private void OnDisable()
+    {
+        Timer.OnTimerFinished -= HandleTimerFinished;
+    }
+
+    #endregion
+
     //if the ticket is finished set a new current ticket and clear all the tiles from the tilemap
     public void TicketCleared()
     {
         m_ticketManager.NewTicket();
         m_boardRenderer.ClearAllTiles();
+        m_comboManager.TicketCleared();
     }
 
     //triggered when next lvl button is pressed on win menu
@@ -71,6 +89,19 @@ public class GameManager : MonoBehaviour
         m_boardRenderer.ClearAllTiles();
         m_ticketManager.ResetTickets();
         OnLevelEnd?.Invoke();
+    }
+
+    //called when timer finishes
+    //checks whether completed ticket num meets level requirements
+    private void HandleTimerFinished()
+    {
+        int ticketReq = m_allLevels[m_currentLevel].GetTicketRequirement();
+        if (m_ticketManager.GetCompletedTickets() >= ticketReq)
+            GameUIManager.s_instance.ToggleWinMenu(true);
+        else
+            GameUIManager.s_instance.ToggleFailMenu(true);
+
+        OnLevelEndEarly?.Invoke();
     }
 
     public TicketData GetCurrentTicket() { return m_ticketManager.GetCurrentTicket(); }

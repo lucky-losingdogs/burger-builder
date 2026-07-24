@@ -12,13 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d484d7eba9231e45a3cc4e4b43dab6b, type: 3}
   m_Name: Level01
   m_EditorClassIdentifier: 
-  difficultyRange: 0000000001000000
+  difficultyRange: 01000000
   timeLimit: 30
-  maxTicketTotal: 6
+  ticketRequirement: 5
   tickets:
-  - {fileID: 11400000, guid: 2a6bbd61a4c93014782f82834e3094a7, type: 2}
-  - {fileID: 11400000, guid: e53e4fa567a654b4ca0f3453f4fdc851, type: 2}
-  - {fileID: 11400000, guid: e53e4fa567a654b4ca0f3453f4fdc851, type: 2}
-  - {fileID: 11400000, guid: 2a6bbd61a4c93014782f82834e3094a7, type: 2}
   - {fileID: 11400000, guid: 2a6bbd61a4c93014782f82834e3094a7, type: 2}
   - {fileID: 11400000, guid: e53e4fa567a654b4ca0f3453f4fdc851, type: 2}

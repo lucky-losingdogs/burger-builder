@@ -85,6 +85,8 @@ public class DragManager : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
         else
             return false;
     }
+    
+    #endregion
 
     private void SetItem(Vector3Int cellPos)
     {
@@ -202,6 +204,4 @@ public class DragManager : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
                 GameManager.s_instance.TicketCleared();
         }
     }
-
-    #endregion
 }

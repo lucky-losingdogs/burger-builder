@@ -10,17 +10,18 @@ using UnityEditor;
 [CreateAssetMenu(fileName = "LevelData", menuName = "Scriptable Objects/LevelData")]
 public class LevelData : ScriptableObject
 {
-    [Range(0, 10)]
+    [Range(1, 5)]
     [field: SerializeField] private int[] difficultyRange;
     [Range(5.0f, 60.0f)]
     [field: SerializeField] private float timeLimit;
-    [field: SerializeField] private int maxTicketTotal; // the number of total tickets used in the level
+    [field: SerializeField] private int ticketRequirement;
 
     [SerializeField] private TicketData[] tickets;
 
     public TicketData[] GetTickets() { return tickets; }
-
     public float GetTimeLimit() { return timeLimit; }
+    public int GetTicketRequirement() { return ticketRequirement; }
+    public float GetDifficulty() { return (float)difficultyRange.Average(); }
 
 #if UNITY_EDITOR
 
@@ -50,30 +51,9 @@ public class LevelData : ScriptableObject
         return difficultyTickets;
     }
 
-    //<summary>
-    //update the tickets used in the level based on the difficulty range, max unique tickets and max ticket count
-    //</summary>
     private void UpdateTickets()
     {
-        List<TicketData> tempTickets = LoadTickets();
-
-        //if the number of ticket scriptable obj of that difficulty
-        //is less than the required amount of tickets in the level,
-        //fill the rest of the list with the same tickets until it reaches ticket total
-        if (tempTickets.Count < maxTicketTotal)
-        {
-            tempTickets = Utilities.ExtendList(tempTickets, maxTicketTotal);
-            tempTickets = Utilities.Shuffle(tempTickets);
-        }
-        //if the number of tickets is greater than the maximum total,
-        //shuffle the list order then trim the excess tickets
-        else
-        {
-            tempTickets = Utilities.Shuffle(tempTickets);
-            tempTickets = Utilities.TrimExcess(tempTickets, maxTicketTotal);
-        }
-
-        tickets = tempTickets.ToArray();
+        tickets = LoadTickets().ToArray();
     }
 
 #endif

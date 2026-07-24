@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI;
+using System;
 using TMPro;
 using System.Collections;
 
@@ -11,6 +11,8 @@ public class Timer : MonoBehaviour
     private string m_template = "Time: ";
     private Coroutine m_timer;
     private float m_timeLimit = 0.0f;
+    
+    public static event Action OnTimerFinished;
 
     #region Set Up
 
@@ -72,7 +74,8 @@ public class Timer : MonoBehaviour
             elapsedTime -= m_timeDecrease;
             UpdateUI(elapsedTime);
         }
+        
         Debug.Log("time over");
-        GameUIManager.s_instance.ToggleFailMenu(true);
+        OnTimerFinished?.Invoke();
     }
 }
