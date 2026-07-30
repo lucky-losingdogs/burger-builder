@@ -99,7 +99,7 @@ public class TicketUIManager : MonoBehaviour
         TicketData data = ui.GetData();
         if (ui != null && data != null)
         {
-            ui.SetSprite(data.GetDiagram());
+            ui.ToggleIcon(false);
             currentTicket.transform.SetParent(m_ticketParent01);
         }
     }

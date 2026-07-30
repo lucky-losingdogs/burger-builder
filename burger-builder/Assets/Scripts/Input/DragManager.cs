@@ -198,7 +198,7 @@ public class DragManager : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
     private void CheckCompletedTicket()
     {
         TicketData currentTicket = GameManager.s_instance.GetCurrentTicket();
-        if (currentTicket != null)
+        if (currentTicket != null && currentTicket.CheckItemCount(m_boardRenderer))
         {
             if (currentTicket.CheckItemPositions(m_boardRenderer))
                 GameManager.s_instance.TicketCleared();

@@ -50,6 +50,9 @@ public struct ItemStructure
 
     public void SetCells(ShapeData shape)
     {
+        if (shape == null || shape.GetCells() == null)
+            return;
+        
         Vector2Int[] tempCells = shape.GetCells();
 
         cells = new Vector3Int[tempCells.Length];
@@ -69,15 +72,19 @@ public struct ItemStructure
             rotation = (rotation + 3) % 4;
     }
 
-    public Vector3Int[] RotateCells(int clockwise)
+    public Vector3Int[] RotateCells(int rot)
     {
         Vector3Int[] rotatedCells = new Vector3Int[cells.Length];
 
         for (int i = 0; i < cells.Length; i++)
         {
-            rotatedCells[i] = Data.RotateCell(cells[i], clockwise);
+            rotatedCells[i] = Utilities.RotateVector3(cells[i], rot);
         }
 
         return rotatedCells;
     }
+    
+    public Vector3Int[] GetCells() { return RotateCells(rotation); }
+    
+    public Vector3Int GetAnchorOffset() { return Utilities.RotateVector3(shape.GetAnchorOffset(), rotation); }
 }

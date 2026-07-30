@@ -13,10 +13,12 @@ public class ShapeData : ScriptableObject
     [field: SerializeField] private Tile ghostTile;
     [field: SerializeField] private Ingredients ingredient;
     [SerializeField] private Vector2Int[] cells;
+    [field: SerializeField] private Vector3Int anchorOffset; 
 
     public Tile GetTile() { return tile; }
     public Tile GetGhostTile() { return ghostTile; }
     public Vector2Int[] GetCells() { return cells; }
+    public Vector3Int GetAnchorOffset() { return anchorOffset; }
 
 
 #if UNITY_EDITOR

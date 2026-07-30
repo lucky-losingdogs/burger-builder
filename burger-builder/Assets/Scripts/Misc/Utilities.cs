@@ -3,12 +3,14 @@ using UnityEngine;
 
 public class Utilities
 {
+    //return the scriptable objects in the folder path as a list
     public static List<T> LoadList<T>(string folderPath) where T : UnityEngine.Object
     {
         T[] objectsArr = Resources.LoadAll<T>(folderPath);
         return new List<T>(objectsArr);
     }
 
+    //return the scriptable objects in the folder path as an array
     public static T[] LoadArray<T>(string folderPath) where T : UnityEngine.Object
     {
         return Resources.LoadAll<T>(folderPath);
@@ -21,6 +23,7 @@ public class Utilities
                             Mathf.RoundToInt(vect3.z));
     }
 
+    //remove the rest of the list after the trim root
     public static List<T> TrimExcess<T>(List<T> list, int trimRoot) where T : UnityEngine.Object
     {
         for (int i = trimRoot; i < list.Count; i++)
@@ -30,6 +33,7 @@ public class Utilities
         return list;
     }
 
+    //extend a list to the desired capacity
     public static List<T> ExtendList<T>(List<T> list, int capacity) where T : UnityEngine.Object
     {
         if (list.Count < 0)
@@ -70,5 +74,17 @@ public class Utilities
         }
 
         return list;
+    }  
+    
+    public static Vector3Int RotateVector3(Vector3Int vect, int rotation)
+    {
+        return rotation switch
+        {
+            0 => vect,
+            1 => new Vector3Int(vect.y, -vect.x, vect.z),
+            2 => new Vector3Int(-vect.x, -vect.y, vect.z),
+            3 => new Vector3Int(-vect.y, vect.x, vect.z),
+            _ => vect
+        };
     }
 }

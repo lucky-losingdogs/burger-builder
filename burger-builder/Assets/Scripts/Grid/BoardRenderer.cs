@@ -9,7 +9,8 @@ public class BoardRenderer : MonoBehaviour
     [SerializeField] private Tile m_ghostTile;
     
     private Tilemap m_tilemap;
-    private Vector2Int m_boardSize = new Vector2Int(6, 6);
+    [SerializeField] private Vector2Int m_boardSize = new Vector2Int(6, 6);
+    [SerializeField] private Vector2Int m_boardOffset = new Vector2Int(0, -1);
     private RectInt m_bounds;
 
     private ItemMap m_itemMap = new ItemMap();
@@ -62,6 +63,16 @@ public class BoardRenderer : MonoBehaviour
     public void ClearAllTiles()
     {
         m_tilemap.ClearAllTiles();
+
+        foreach (List<Item> itemList in m_itemMap.GetValues())
+        {
+            for (int i = 0; i < itemList.Count; i++)
+            {
+                if (itemList[i] != null)
+                    StartCoroutine(C_WaitDestroyItem(itemList[i]));
+            }
+        }
+        
         m_itemMap.ResetMap();
     }
 
@@ -170,7 +181,7 @@ public class BoardRenderer : MonoBehaviour
     //calculate bounds of the grid using the grid size and the origin of the grid
     private RectInt CalculateBounds()
     {
-        Vector2Int position = new Vector2Int(-m_boardSize.x / 2, -m_boardSize.y / 2);
+        Vector2Int position = new Vector2Int(-m_boardSize.x / 2, -m_boardSize.y / 2) + m_boardOffset;
         return new RectInt(position, m_boardSize);
     }
 
