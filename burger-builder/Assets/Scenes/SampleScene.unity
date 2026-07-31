@@ -717,9 +717,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ticketPrefab: {fileID: 2564215139676011070, guid: 9ae4dcf719cf7e647aa1386e03e83ff7, type: 3}
-  m_ticketParent01: {fileID: 1106955764}
-  m_ticketParent02: {fileID: 64569681}
-  m_ticketParentRect: {fileID: 64569681}
+  m_firstTicketParent: {fileID: 1106955764}
+  m_ticketLineParent: {fileID: 64569681}
   m_canvas: {fileID: 2097033523}
   m_slideDuration: 0.7
   m_padding: 5
@@ -1727,8 +1726,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -254, y: -360}
-  m_SizeDelta: {x: 420, y: 720}
+  m_AnchoredPosition: {x: -254, y: -304}
+  m_SizeDelta: {x: 400, y: 612.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1106955766
 MonoBehaviour:
@@ -3141,6 +3140,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ghostTile: {fileID: 11400000, guid: 290f1c45857d3e34a9e002bc7ea2b51e, type: 2}
   m_boardSize: {x: 4, y: 5}
+  m_boardOffset: {x: 0, y: -1}
 --- !u!156049354 &1720711215
 Grid:
   m_ObjectHideFlags: 0

@@ -129,5 +129,25 @@ public class TilemapUI : MonoBehaviour
         
         if (currentRow.Count > 0)
             m_tileImages.Add(currentRow);
-    } 
+    }
+
+    public void RebuildLayout(Vector2 size, Vector2 position)
+    {
+        RectTransform gridRect = m_grid.GetComponent<RectTransform>();
+        if (gridRect == null)
+            return;
+        
+        Vector2 originalCellSize = m_grid.cellSize;
+        
+        //adjust size and pos to match the parent ticket's
+        gridRect.sizeDelta = size * 0.8f;
+        gridRect.position = position;
+        
+        //change the cell size of the grid based on the scale of the increase in size
+        float scale = (size.x / originalCellSize.x) * 0.2f;
+        m_grid.cellSize = new Vector2(originalCellSize.x * scale, originalCellSize.y * scale);
+        LayoutRebuilder.ForceRebuildLayoutImmediate(gridRect);
+    }
+    
+    public GridLayoutGroup GetGrid() { return m_grid; }
 }

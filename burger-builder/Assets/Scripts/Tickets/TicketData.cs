@@ -62,11 +62,7 @@ public class TicketData : ScriptableObject
     //convert from ticket ui tilemap coords into actual tilemap coords
     private Vector3Int ConvertTicketPositions(Vector3Int ticketPos, Vector3Int anchorOffset)
     {
-        Vector3Int result = ticketPos + new Vector3Int(-2, -3, 0) + anchorOffset;
-    
-        Debug.Log($"TicketPos: {ticketPos}, Anchor: {anchorOffset} Result: {result}");
-
-        return result;
+        return ticketPos + new Vector3Int(-2, -3, 0) + anchorOffset;
     }
 
     public Sprite GetSprite() { return sprite; }

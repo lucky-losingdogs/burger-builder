@@ -34,4 +34,9 @@ public class TicketUI : MonoBehaviour
     }
 
     public TicketData GetData() { return m_data; }
+
+    public void RebuildLayout(Vector2 size, Vector2 position)
+    {
+        m_tilemapUI.RebuildLayout(size, position);
+    }
 }
