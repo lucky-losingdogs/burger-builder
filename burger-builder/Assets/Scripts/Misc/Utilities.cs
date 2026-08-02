@@ -76,6 +76,10 @@ public class Utilities
         return list;
     }  
     
+    //<summary>
+    // rotates a vector3 by 90 * the rotation value
+    // e.g: 2 is 180 degree rotation
+    // </summary>
     public static Vector3Int RotateVector3(Vector3Int vect, int rotation)
     {
         return rotation switch
@@ -86,5 +90,10 @@ public class Utilities
             3 => new Vector3Int(-vect.y, vect.x, vect.z),
             _ => vect
         };
+    }
+
+    public static Vector2 Add(Vector2 a, Vector2 b)
+    {
+        return new Vector2(a.x + b.x, a.y + b.y);
     }
 }

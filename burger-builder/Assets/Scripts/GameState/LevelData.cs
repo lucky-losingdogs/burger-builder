@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Logic;
 
 
 #if UNITY_EDITOR
@@ -17,8 +18,11 @@ public class LevelData : ScriptableObject
     [field: SerializeField] private int ticketRequirement;
 
     [SerializeField] private TicketData[] tickets;
+    
+    [field: SerializeField] private PerkData[] perks;
 
     public TicketData[] GetTickets() { return tickets; }
+    public PerkData[] GetPerks() { return perks; }
     public float GetTimeLimit() { return timeLimit; }
     public int GetTicketRequirement() { return ticketRequirement; }
     public float GetDifficulty() { return (float)difficultyRange.Average(); }

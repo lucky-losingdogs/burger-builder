@@ -30,7 +30,7 @@ public class ShapeData : ScriptableObject
 
     private void SetCells()
     {
-        Data.Cells0.TryGetValue(ingredient, out cells);
+        Data.Cells.TryGetValue(ingredient, out cells);
     }
 
 #endif

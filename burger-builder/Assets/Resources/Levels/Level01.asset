@@ -17,4 +17,5 @@ MonoBehaviour:
   ticketRequirement: 5
   tickets:
   - {fileID: 11400000, guid: 2a6bbd61a4c93014782f82834e3094a7, type: 2}
-  - {fileID: 11400000, guid: e53e4fa567a654b4ca0f3453f4fdc851, type: 2}
+  perks:
+  - {fileID: 11400000, guid: 29a76d7cd749aa846a6e7cc9acf1fe89, type: 2}

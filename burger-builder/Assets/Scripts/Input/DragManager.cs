@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
-using static UnityEditor.Progress;
+using System;
 
 public class DragManager : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
@@ -8,6 +8,8 @@ public class DragManager : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
     private Item m_currentItem;
 
     private bool m_rotating = false;
+
+    public static event Action<TicketData, BoardRenderer> OnItemDropped;
 
     #region Set Up
 
@@ -198,10 +200,6 @@ public class DragManager : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
     private void CheckCompletedTicket()
     {
         TicketData currentTicket = GameManager.s_instance.GetCurrentTicket();
-        if (currentTicket != null && currentTicket.CheckItemCount(m_boardRenderer))
-        {
-            if (currentTicket.CheckItemPositions(m_boardRenderer))
-                GameManager.s_instance.TicketCleared();
-        }
+        OnItemDropped?.Invoke(currentTicket, m_boardRenderer);
     }
 }

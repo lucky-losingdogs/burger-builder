@@ -87,7 +87,7 @@ public class GameManager : MonoBehaviour
     private void ClearLevel()
     {
         m_boardRenderer.ClearAllTiles();
-        m_ticketManager.ResetTickets();
+        m_ticketManager.Reset();
         OnLevelEnd?.Invoke();
     }
 

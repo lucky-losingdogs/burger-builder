@@ -1,17 +1,24 @@
+using System;
 using UnityEngine;
 using System.Collections;
 
 public class ComboManager : MonoBehaviour
 {
+    [Header("Combos")]
     [SerializeField] private int m_comboTicketRequirement = 3; //the number of tickets completed within the combo time limit 
-    [SerializeField] private float m_comboTimeLimit = 5.0f;
+    [SerializeField] private float m_comboTimeLimit = 5.0f; // time limit that another ticket must be completed in before losing combo
     [SerializeField] private float m_comboDecrement = 0.5f;
+    
+    [Header("Perks")]
+    [SerializeField] private float m_perkComboRequirement = 4.0f;
 
-    private float m_comboTimer = 0.0f;
+    public static event Action OnPerkAchieved;
+
+    private float m_comboTimer = 0.0f; // float representative of a timer
     private float m_currentCombo = 0.0f;
     private int m_clearedTickets = 0;
     
-    private Coroutine c_timer = null;
+    private Coroutine c_comboTimer = null;
     private Coroutine c_cooldownTimer = null;
     
     private ComboUIManager m_UIManager;
@@ -23,14 +30,16 @@ public class ComboManager : MonoBehaviour
             Debug.LogError("ComboUIManager not found");
     }
 
+    //every time a ticket is cleared, the combo timer is reset back to the time limit
     public void TicketCleared()
     {
         m_clearedTickets++;
         m_comboTimer = m_comboTimeLimit;
         
-        if (c_timer == null)
-            c_timer = StartCoroutine(C_StartComboTimer(m_comboTicketRequirement));
+        if (c_comboTimer == null)
+            c_comboTimer = StartCoroutine(C_StartComboTimer(m_comboTicketRequirement));
         
+        //to start gaining combo, must clear 3 tickets within time limit
         if (m_currentCombo > 0 || m_clearedTickets >= m_comboTicketRequirement)
         {
             IncreaseCombo(m_clearedTickets);
@@ -40,6 +49,7 @@ public class ComboManager : MonoBehaviour
 
     private void IncreaseCombo(int clearedTickets)
     {
+        //if the combo increases while its cooling down, the cooldown is stopped 
         if (c_cooldownTimer != null)
         {
             StopCoroutine(c_cooldownTimer);
@@ -47,14 +57,23 @@ public class ComboManager : MonoBehaviour
         }
         
         SetCombo(m_currentCombo + clearedTickets);
+        CheckPerkRequirement(m_currentCombo);
     }
     
+    //set combo value + update ui
     private void SetCombo(float value)
     {
         m_currentCombo = value;
         m_UIManager.UpdateCombo(m_currentCombo);
     }
+
+    private void CheckPerkRequirement(float comboValue)
+    {
+        if (comboValue >= m_perkComboRequirement)
+            OnPerkAchieved?.Invoke();
+    }
     
+    //coroutine to continuously decrease from the timer float
     private IEnumerator C_StartComboTimer(int ticketReq = 1)
     {
         while (m_comboTimer > 0)
@@ -64,10 +83,12 @@ public class ComboManager : MonoBehaviour
             yield return null;
         }
         
-        c_timer = null;
+        //if the timer reaches 0, exits the loop and starts the combo cooldown timer
+        c_comboTimer = null;
         c_cooldownTimer = StartCoroutine(C_ComboCooldownTimer());
     }
 
+    //combo begins to slowly decrease
     private IEnumerator C_ComboCooldownTimer()
     {
         while (m_currentCombo > 0)
