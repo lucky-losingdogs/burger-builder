@@ -88,6 +88,14 @@ public class TicketManager : ManagerParent<TicketData>
         m_levelOver = false;
     }
     
+    //clear the tickets in the queue (excludes the current ticket that was already dequeued)
+    // and clear the ui tickets, setting the start index at 1 to skip the current ticket ui
+    public void ClearTicketQueue()
+    {
+        m_ticketOrder.Clear();
+        m_UIManager.RemoveAllTickets(1);
+    }
+    
     #region Check Ticket Completed
 
     private void CheckCompletedTicket(TicketData currentTicket, BoardRenderer boardRenderer)

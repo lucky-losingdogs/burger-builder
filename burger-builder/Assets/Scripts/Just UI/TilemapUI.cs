@@ -10,7 +10,6 @@ public class TilemapUI : MonoBehaviour
 {
     public List<List<Image>> m_tileImages;
     [SerializeField] private GridLayoutGroup m_grid;
-    [SerializeField] private bool debug = false;
 
     public void Show()
     {

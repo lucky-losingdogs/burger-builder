@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
     public static event Action<LevelData> OnLevelStart;
     public static event Action OnLevelEnd;
     public static event Action OnLevelEndEarly;
+    
+    public static event Action<GameContext> OnContextCreated;
 
     #region Set Up
     
@@ -40,6 +42,8 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        CreateGameContext();
+        
         OnLevelStart?.Invoke(m_allLevels[m_currentLevel]);
     }
 
@@ -51,6 +55,12 @@ public class GameManager : MonoBehaviour
     private void OnDisable()
     {
         Timer.OnTimerFinished -= HandleTimerFinished;
+    }
+
+    private void CreateGameContext()
+    {
+        GameContext context = new GameContext(m_ticketManager, m_comboManager);
+        OnContextCreated?.Invoke(context);
     }
 
     #endregion

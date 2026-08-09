@@ -40,7 +40,7 @@ public class LevelData : ScriptableObject
     //</summary>
     private List<TicketData> LoadTickets()
     {
-        List<TicketData> m_allTickets = Utilities.LoadList<TicketData>("Tickets");
+        List<TicketData> m_allTickets = LoadAll<TicketData>("Tickets");
         List<TicketData> difficultyTickets = new List<TicketData>();
 
         foreach (TicketData data in m_allTickets)
@@ -55,9 +55,15 @@ public class LevelData : ScriptableObject
         return difficultyTickets;
     }
 
+    private List<T> LoadAll<T>(string folderPath) where T : UnityEngine.Object
+    {
+        return Utilities.LoadList<T>(folderPath);
+    }
+
     private void UpdateTickets()
     {
         tickets = LoadTickets().ToArray();
+        perks = LoadAll<PerkData>("Perks").ToArray();
     }
 
 #endif

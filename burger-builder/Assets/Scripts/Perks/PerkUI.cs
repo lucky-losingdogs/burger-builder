@@ -11,6 +11,11 @@ public class PerkUI : MonoBehaviour
 
     private string m_defaultText = "Default Name";
     
+    // to signal a fade out and allow for destroy after fade, set first index to true
+    // after each component of the ui finishes fading out,
+    // set the equivalent bool in the array to true to allow for destroying the game object after fully fading out 
+    private bool[] m_isFadeCompleted = new bool[4] {false, false, false, false}; 
+    
     public void SetName(string name)
     {
         if (NameCheck(name))
@@ -19,17 +24,30 @@ public class PerkUI : MonoBehaviour
             m_perkName.text = m_defaultText;
     }
 
+    public void Destroy()
+    {
+        if (m_isFadeCompleted[0] == false)
+        {
+            Debug.LogError("Cannot destroy Perk UI, not fading out");
+            return;
+        }
+        
+        StartCoroutine(C_Destroy());
+    }
+
     public void Fade(float targetOpacity, float fadeDuration)
     {
         Image blackImg = m_blackBar.GetComponent<Image>();
         Image redImg = m_redBar.GetComponent<Image>();
         
-        StartCoroutine(C_Fade<Image>(blackImg, targetOpacity, fadeDuration));
-        StartCoroutine(C_Fade<Image>(redImg, targetOpacity, fadeDuration));
-        StartCoroutine(C_Fade<TextMeshProUGUI>(m_perkName, targetOpacity, fadeDuration));
+        CheckFadeOut(targetOpacity);
+        
+        StartCoroutine(C_Fade<Image>(blackImg, targetOpacity, fadeDuration, 1));
+        StartCoroutine(C_Fade<Image>(redImg, targetOpacity, fadeDuration, 2));
+        StartCoroutine(C_Fade<TextMeshProUGUI>(m_perkName, targetOpacity, fadeDuration, 3));
     }
 
-    private IEnumerator C_Fade<T>(T uiElement, float targetOpacity, float fadeDuration) where T : Graphic
+    private IEnumerator C_Fade<T>(T uiElement, float targetOpacity, float fadeDuration, int index) where T : Graphic
     {
         float startAlpha = uiElement.color.a;
         Color startColour = uiElement.color;
@@ -48,6 +66,42 @@ public class PerkUI : MonoBehaviour
         //make sure alpha is fully set to the desired opacity
         startColour.a = targetOpacity;
         uiElement.color = startColour;
+        
+        if (m_isFadeCompleted[0] == true)
+            m_isFadeCompleted[index] = true;
+    }
+
+    private IEnumerator C_Destroy()
+    {
+        bool allFadesComplete = false;
+
+        while (!allFadesComplete)
+        {
+            for (int i = 1;  i < m_isFadeCompleted.Length; i++)
+            {
+                if (m_isFadeCompleted[i] == false)
+                {
+                    allFadesComplete = false;
+                    break;
+                }
+                else
+                {
+                    allFadesComplete = true;
+                }
+            }
+
+            yield return null;
+        }
+        
+        Destroy(gameObject);
+    }
+
+    //setting first element in array to true to allow for
+    //destroying the game object after fade is completed
+    private void CheckFadeOut(float targetOpacity)
+    {
+        if (targetOpacity <= 0)
+            m_isFadeCompleted[0] = true;
     }
     
     public GameObject GetBlackBar() { return m_blackBar; }

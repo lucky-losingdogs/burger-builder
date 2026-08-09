@@ -1,7 +1,5 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -43,6 +41,9 @@ public class PerkUIManager : MonoBehaviour
         GameObject perk = Instantiate(m_perkUIPrefab, m_waypoints[0]);
         if (perk == null)
             return;
+        
+        //add a random float to the z rotation
+        perk.transform.eulerAngles += new Vector3(0, 0, Random.Range(-12, 18));
         
         PerkUI perkUI = perk.GetComponent<PerkUI>();
         if (perkUI == null)
@@ -108,6 +109,7 @@ public class PerkUIManager : MonoBehaviour
         {
             PerkUI currentPerk = m_perkQueue.Dequeue();
             currentPerk.Fade((float)Opacity.FadeOut, m_fadeDuration);
+            currentPerk.Destroy();
         }
 
         m_finishedSliding = false;

@@ -19,7 +19,6 @@ public class ComboUIManager : MonoBehaviour
     //update bar image's fill amount to match current combo
     public void UpdateCombo(float combo)
     {
-        Debug.Log(combo);
         m_barImage.fillAmount = combo / 10;
     }
 }

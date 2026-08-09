@@ -10,9 +10,11 @@ public class ComboManager : MonoBehaviour
     [SerializeField] private float m_comboDecrement = 0.5f;
     
     [Header("Perks")]
-    [SerializeField] private float m_perkComboRequirement = 4.0f;
+    [SerializeField] private float m_perkComboRequirement = 3.0f;
+    [SerializeField] private float m_perkRequirementIncrement = 0.3f;
+    private float m_currentPerkRequirement = 0;
 
-    public static event Action OnPerkAchieved;
+    public static event Action<float> OnPerkAchieved;
 
     private float m_comboTimer = 0.0f; // float representative of a timer
     private float m_currentCombo = 0.0f;
@@ -28,6 +30,8 @@ public class ComboManager : MonoBehaviour
         m_UIManager = GetComponent<ComboUIManager>();
         if (m_UIManager == null)
             Debug.LogError("ComboUIManager not found");
+
+        m_currentPerkRequirement = m_perkComboRequirement;
     }
 
     //every time a ticket is cleared, the combo timer is reset back to the time limit
@@ -69,8 +73,12 @@ public class ComboManager : MonoBehaviour
 
     private void CheckPerkRequirement(float comboValue)
     {
-        if (comboValue >= m_perkComboRequirement)
-            OnPerkAchieved?.Invoke();
+        if (comboValue >= m_currentPerkRequirement)
+        {
+            m_currentPerkRequirement += m_perkComboRequirement + m_perkRequirementIncrement;
+            Debug.Log($"perk combo requirement: {m_currentPerkRequirement}");
+            OnPerkAchieved?.Invoke(comboValue);
+        }
     }
     
     //coroutine to continuously decrease from the timer float
@@ -94,10 +102,12 @@ public class ComboManager : MonoBehaviour
         while (m_currentCombo > 0)
         {
             SetCombo(m_currentCombo - m_comboDecrement);
+            m_currentPerkRequirement -= m_comboDecrement;
             yield return new WaitForSeconds(0.3f);
         }
 
         m_currentCombo = 0;
+        m_currentPerkRequirement = m_perkComboRequirement; 
         c_cooldownTimer = null;
     }
 }

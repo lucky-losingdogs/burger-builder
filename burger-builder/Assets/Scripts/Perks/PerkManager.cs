@@ -1,16 +1,15 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using Random = UnityEngine.Random;
+using Logic;
 using UnityEngine;
-using UnityEngine.UI;
-using Random = System.Random;
 
 public class PerkManager : ManagerParent<PerkData>
 {
+    private GameContext m_context;
+    
     private PerkUIManager m_UIManager;
     private PerkData[] m_levelPerks;
-
-    [SerializeField] private Button debugButton;
     
     #region Set Up
 
@@ -23,12 +22,14 @@ public class PerkManager : ManagerParent<PerkData>
     {
         base.OnEnable();
         ComboManager.OnPerkAchieved += HandlePerkAchieved;
+        GameManager.OnContextCreated += SetGameContext;
     }
     
     protected override void OnDisable()
     {
         base.OnDisable();
         ComboManager.OnPerkAchieved -= HandlePerkAchieved;
+        GameManager.OnContextCreated -= SetGameContext;
     }
 
     protected override List<PerkData> GetRawData(LevelData levelData)
@@ -46,21 +47,58 @@ public class PerkManager : ManagerParent<PerkData>
     {
         m_levelPerks = m_levelDataItems;
     }
+
+    private void SetGameContext(GameContext context)
+    {
+        m_context = context;
+        if (m_context == null)
+            Debug.LogError("GameContext is null!");
+    }
     
     #endregion
 
     //trigger a random perk
-    private void HandlePerkAchieved()
+    private void HandlePerkAchieved(float combo)
     {
         if (m_levelPerks.Length <= 0)
             return;
         
-        Random rnd = new Random();
-        int index  = rnd.Next(0, m_levelPerks.Length - 1);
+        List<PerkData> rankPerks = GetRankPerks(combo);
+        if (rankPerks.Count == 0)
+            return;
         
-        PerkData perk = m_levelPerks[index];
+        int index  = Random.Range(0, rankPerks.Count - 1);
+        
+        PerkData perk = rankPerks[index];
+        
         UpdateUI(perk);
-        perk.Effect();
+        ActivatePerk(perk);
+    }
+
+    //trigger the effect of the perk by getting the class w/ logic from data dictionary
+    private void ActivatePerk(PerkData perk)
+    {
+        PerkTypes perkType = perk.GetPerkType();
+        if (Data.Perks.TryGetValue(perkType, out PerkLogic logic))
+            logic.Effect(m_context);
+    }
+
+    private List<PerkData> GetRankPerks(float combo)
+    {
+        List<PerkData> rankPerks = new List<PerkData>();
+
+        foreach (PerkData data in m_levelPerks)
+        {
+            float rank = data.GetRank();
+            Debug.Log("combo" + combo);
+            Debug.Log("rank"+rank);
+            if (combo >= rank)
+            {
+                rankPerks.Add(data);
+            }
+        }
+
+        return rankPerks;
     }
 
     private void UpdateUI(PerkData perk)
@@ -69,10 +107,5 @@ public class PerkManager : ManagerParent<PerkData>
             return;
 
         m_UIManager.SpawnPerk(perk);
-    }
-
-    public void DebugButton()
-    {
-        HandlePerkAchieved();
     }
 }

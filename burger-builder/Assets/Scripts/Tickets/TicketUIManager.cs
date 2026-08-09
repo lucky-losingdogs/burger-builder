@@ -75,16 +75,16 @@ public class TicketUIManager : MonoBehaviour
         }
     }
 
-    public void RemoveAllTickets()
+    public void RemoveAllTickets(int startIndex = 0)
     {
-        foreach (GameObject ticket in m_tickets)
+        for (int i = startIndex; i < m_tickets.Count; i++)
         {
-            if (ticket == null)
+            if (m_tickets[i] == null)
                 continue;
-
-            Destroy(ticket);
+            
+            Destroy(m_tickets[i]);
         }
-
+        
         m_tickets = new List<GameObject>();
     }
 
