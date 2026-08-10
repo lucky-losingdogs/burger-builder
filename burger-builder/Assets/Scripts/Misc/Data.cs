@@ -17,7 +17,12 @@ public static class Data
     
     public static readonly Dictionary<PerkTypes, PerkLogic> Perks = new Dictionary<PerkTypes, PerkLogic>()
     {
-        { PerkTypes.ClearAllTickets, new ClearAllTickets() }
+        { PerkTypes.ClearAllTickets, new ClearAllTickets() },
+        { PerkTypes.ClearAllOfType, new ClearAllOfType() },
+        { PerkTypes.DecreaseComboDecrement, new DecreaseComboDecrement() },
+        { PerkTypes.IncreaseComboLimit, new IncreaseComboLimit() },
+        { PerkTypes.ComboMultiplier, new ComboMultiplier() },
+        { PerkTypes.LowerItemSpawnLimit, new LowerItemSpawnLimit() },
     };
 }
 
@@ -28,5 +33,5 @@ public enum Ingredients
 
 public enum PerkTypes
 {
-    ClearAllOfType, ClearAllTickets, DecreaseComboDecrement, LowerItemSpawnLimit
+    ClearAllOfType, ClearAllTickets, DecreaseComboDecrement, IncreaseComboLimit, ComboMultiplier, LowerItemSpawnLimit
 }

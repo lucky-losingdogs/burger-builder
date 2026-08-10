@@ -11,6 +11,8 @@ public class PerkUI : MonoBehaviour
 
     private string m_defaultText = "Default Name";
     
+    private bool m_isSliding = false;
+    
     // to signal a fade out and allow for destroy after fade, set first index to true
     // after each component of the ui finishes fading out,
     // set the equivalent bool in the array to true to allow for destroying the game object after fully fading out 
@@ -106,5 +108,7 @@ public class PerkUI : MonoBehaviour
     
     public GameObject GetBlackBar() { return m_blackBar; }
     public GameObject GetRedBar() { return m_redBar; }
+    public bool GetSliding() { return m_isSliding; }
+    public void SetSliding(bool isSliding) { m_isSliding = isSliding; }
     private bool NameCheck(string name) { return name.Length > 0; }
 }

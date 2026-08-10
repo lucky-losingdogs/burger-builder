@@ -10,6 +10,8 @@ public class PerkManager : ManagerParent<PerkData>
     
     private PerkUIManager m_UIManager;
     private PerkData[] m_levelPerks;
+
+    private PerkData m_activePerk = null;
     
     #region Set Up
 
@@ -35,12 +37,6 @@ public class PerkManager : ManagerParent<PerkData>
     protected override List<PerkData> GetRawData(LevelData levelData)
     {
         return levelData.GetPerks().ToList();
-    }
-    
-    protected override void HandleLevelStart(LevelData levelData)
-    {
-        base.HandleLevelStart(levelData);
-        SetValues(levelData);
     }
 
     protected override void SetValues(LevelData levelData)
@@ -80,7 +76,12 @@ public class PerkManager : ManagerParent<PerkData>
     {
         PerkTypes perkType = perk.GetPerkType();
         if (Data.Perks.TryGetValue(perkType, out PerkLogic logic))
-            logic.Effect(m_context);
+            logic.Effect(m_context, perk.GetDuration(), perk.GetValue());
+    }
+
+    public void DebugButton(PerkData perk)
+    {
+        ActivatePerk(perk);
     }
 
     private List<PerkData> GetRankPerks(float combo)
@@ -107,5 +108,13 @@ public class PerkManager : ManagerParent<PerkData>
             return;
 
         m_UIManager.SpawnPerk(perk);
+    }
+    
+    public override void Reset()
+    {
+        base.Reset();
+        m_UIManager.ClearAllPerks();
+        m_levelPerks = null;
+        m_activePerk = null;
     }
 }

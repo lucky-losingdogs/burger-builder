@@ -14,6 +14,7 @@ public class TicketManager : ManagerParent<TicketData>
 
     private Queue<TicketData> m_ticketOrder = new Queue<TicketData>();
     private TicketData m_currentTicket = null;
+    private TicketData m_previousTicket = null;
     
     private int m_completedTickets = 0;
     private bool m_levelOver = false;
@@ -68,6 +69,8 @@ public class TicketManager : ManagerParent<TicketData>
 
     public void NewTicket()
     {
+        m_previousTicket = m_currentTicket;
+        
         //remove UI ticket
         m_UIManager.RemoveTicket(m_currentTicket);
         
@@ -83,10 +86,13 @@ public class TicketManager : ManagerParent<TicketData>
         m_UIManager.RemoveAllTickets();
         m_ticketOrder.Clear();
         m_currentTicket = null;
+        m_previousTicket = null;
         m_levelTickets = null;
         m_completedTickets = 0;
         m_levelOver = false;
     }
+    
+    #region Perk Behaviour
     
     //clear the tickets in the queue (excludes the current ticket that was already dequeued)
     // and clear the ui tickets, setting the start index at 1 to skip the current ticket ui
@@ -95,6 +101,27 @@ public class TicketManager : ManagerParent<TicketData>
         m_ticketOrder.Clear();
         m_UIManager.RemoveAllTickets(1);
     }
+
+    public void ClearByTicketType(TicketData ticketToClear)
+    {
+        Queue<TicketData> newQueue = new Queue<TicketData>();
+
+        foreach (TicketData ticket in m_ticketOrder)
+        {
+            if (ticket == ticketToClear)
+            {
+                m_UIManager.RemoveTicket(ticket);
+            }
+            else
+            {
+                newQueue.Enqueue(ticket);
+            }
+        }
+
+        m_ticketOrder = newQueue;
+    }
+    
+    #endregion
     
     #region Check Ticket Completed
 
@@ -180,7 +207,7 @@ public class TicketManager : ManagerParent<TicketData>
                 newSpawnInterval = Mathf.Max(2, newSpawnInterval - m_intervalDecrease * elapsedTime);
             }
             
-            m_levelTickets = Utilities.Shuffle(m_levelTickets.ToList()).ToArray();
+            m_levelTickets = Utilities.Shuffle(m_levelTickets.ToList()).ToArray();;
         }
         
         Debug.Log("ticket spawn loop over");
@@ -191,15 +218,17 @@ public class TicketManager : ManagerParent<TicketData>
     private IEnumerator C_SetCurrentTicket()
     {
         m_currentTicket = null;
+        
         yield return new WaitUntil(CheckQueue);
 
         m_currentTicket = m_ticketOrder.Dequeue();
     }
     
     #endregion
-    
-    private bool CheckQueue() { return m_ticketOrder.Count > 0; }
-    public TicketData GetCurrentTicket() { return m_currentTicket; }
-    public int GetCompletedTickets() { return m_completedTickets; }
-    private void HandleLevelEndEarly() { m_levelOver = true; }
+
+    private bool CheckQueue() => m_ticketOrder.Count > 0;
+    public TicketData GetCurrentTicket() => m_currentTicket;
+    public int GetCompletedTickets() => m_completedTickets;
+    public TicketData GetPreviousCurrentTicket() => m_previousTicket;
+    private void HandleLevelEndEarly() => m_levelOver = true;
 }

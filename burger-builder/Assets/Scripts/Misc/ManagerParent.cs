@@ -26,6 +26,7 @@ public abstract class ManagerParent<T> : MonoBehaviour where T : UnityEngine.Obj
         List<T> rawData = GetRawData(levelData);
         List<T> processedData = ProcessData(rawData, levelData);
         m_levelDataItems = processedData.ToArray();
+        SetValues(levelData);
     }
     
     //<summary>

@@ -75,6 +75,9 @@ public class TicketUIManager : MonoBehaviour
         }
     }
 
+    //destroy all ticket ui game objects & clear list references
+    //start index used to specify the start point that tickets in the list should be destroyed
+    //used for clearing just the ticket order queue but not the current ticket
     public void RemoveAllTickets(int startIndex = 0)
     {
         for (int i = startIndex; i < m_tickets.Count; i++)
@@ -84,8 +87,10 @@ public class TicketUIManager : MonoBehaviour
             
             Destroy(m_tickets[i]);
         }
-        
-        m_tickets = new List<GameObject>();
+
+        //clear the list after the start index instead of a complete list clear
+        if (m_tickets.Count > startIndex)
+            m_tickets.RemoveRange(startIndex, m_tickets.Count - startIndex);
     }
 
     //set ticket to the main ui ticket

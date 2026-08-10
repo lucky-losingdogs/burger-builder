@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     private TicketManager m_ticketManager;
     private BoardRenderer m_boardRenderer;
     private ComboManager m_comboManager;
+    private PerkManager m_perkManager;
 
     public static event Action<LevelData> OnLevelStart;
     public static event Action OnLevelEnd;
@@ -98,6 +99,7 @@ public class GameManager : MonoBehaviour
     {
         m_boardRenderer.ClearAllTiles();
         m_ticketManager.Reset();
+        m_perkManager.Reset();
         OnLevelEnd?.Invoke();
     }
 

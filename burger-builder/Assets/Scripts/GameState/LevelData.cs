@@ -18,11 +18,12 @@ public class LevelData : ScriptableObject
     [field: SerializeField] private int ticketRequirement;
 
     [SerializeField] private TicketData[] tickets;
-    
-    [field: SerializeField] private PerkData[] perks;
+    [SerializeField] private PerkData[] perks;
+    [SerializeField] private ShapeData[] shapes;
 
     public TicketData[] GetTickets() { return tickets; }
     public PerkData[] GetPerks() { return perks; }
+    public ShapeData[] GetShapes() { return shapes; }
     public float GetTimeLimit() { return timeLimit; }
     public int GetTicketRequirement() { return ticketRequirement; }
     public float GetDifficulty() { return (float)difficultyRange.Average(); }

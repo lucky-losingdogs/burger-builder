@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,19 +15,20 @@ public class PerkUIManager : MonoBehaviour
     [SerializeField] private float m_slideDuration = 0.3f;
     [SerializeField] private float m_delayDuration = 0.1f;
     [SerializeField] private float m_lifetime = 1f;
-    [SerializeField] private float m_spawnRadius = 100f;
     [SerializeField] private float m_fadeDuration = 0.15f;
+    [SerializeField] private float m_spawnRadius = 100f;
+    [SerializeField] private Vector2 m_randomRotationRange = new Vector2(-12, 18);
     
     private Vector2 m_redBarOffset = new Vector2(45, -23);
-    private bool m_finishedSliding = false;
+    
+    private List<Coroutine> m_lifeTimeCoroutines = new List<Coroutine>();
+    private Queue<PerkUI> m_perkQueue = new Queue<PerkUI>();
 
     private enum Opacity
     {
         FadeIn = 1,
         FadeOut = 0
     }
-    
-    private Queue<PerkUI> m_perkQueue = new Queue<PerkUI>();
 
     private void Awake()
     {
@@ -43,7 +45,7 @@ public class PerkUIManager : MonoBehaviour
             return;
         
         //add a random float to the z rotation
-        perk.transform.eulerAngles += new Vector3(0, 0, Random.Range(-12, 18));
+        perk.transform.eulerAngles += new Vector3(0, 0, Random.Range(m_randomRotationRange.x, m_randomRotationRange.y));
         
         PerkUI perkUI = perk.GetComponent<PerkUI>();
         if (perkUI == null)
@@ -51,14 +53,15 @@ public class PerkUIManager : MonoBehaviour
         
         m_perkQueue.Enqueue(perkUI);
         perkUI.SetName(perkData.GetName());
-
-        StartCoroutine(C_DelayedSlide(perkUI.GetBlackBar(), perkUI.GetRedBar()));
-        StartCoroutine(C_Lifetime());
+        StartCoroutine(C_DelayedSlide(perkUI, perkUI.GetBlackBar(), perkUI.GetRedBar()));
+        
+        Coroutine lifetimeCoroutine = StartCoroutine(C_Lifetime());
+        m_lifeTimeCoroutines.Add(lifetimeCoroutine);
     }
 
-    private IEnumerator C_DelayedSlide(GameObject blackBar, GameObject redBar)
+    private IEnumerator C_DelayedSlide(PerkUI ui, GameObject blackBar, GameObject redBar)
     {
-        m_finishedSliding = false;
+        ui.SetSliding(true);
         
         RectTransform blackRect = blackBar.GetComponent<RectTransform>();
         RectTransform redRect = redBar.GetComponent<RectTransform>();
@@ -77,12 +80,9 @@ public class PerkUIManager : MonoBehaviour
         Vector2 redTarget = Utilities.Add(targetPoint, m_redBarOffset);
         StartCoroutine(C_Slide(redRect, m_waypoints[0].position, redTarget));
 
-        if (m_perkQueue.Count > 0)
-        {
-            yield return new WaitUntil(() => CheckSliding(blackRect, targetPoint, 0.1f));
-            yield return new WaitUntil(() => CheckSliding(redRect, redTarget, 0.1f));
-            m_finishedSliding = true;
-        }
+        yield return new WaitUntil(() => CheckSliding(blackRect, targetPoint, 0.1f));
+        yield return new WaitUntil(() => CheckSliding(redRect, redTarget, 0.1f));
+        ui.SetSliding(false);
     }
 
     //lerp position of the transform to target over slide duration
@@ -102,17 +102,18 @@ public class PerkUIManager : MonoBehaviour
 
     private IEnumerator C_Lifetime()
     {
-        yield return new WaitUntil(() => m_finishedSliding);
-        yield return new WaitForSeconds(m_lifetime);
-        
         if (m_perkQueue.Count > 0)
         {
             PerkUI currentPerk = m_perkQueue.Dequeue();
-            currentPerk.Fade((float)Opacity.FadeOut, m_fadeDuration);
-            currentPerk.Destroy();
+            if (currentPerk != null)
+            {
+                yield return new WaitWhile(() => currentPerk.GetSliding());
+                yield return new WaitForSeconds(m_lifetime);
+                
+                currentPerk.Fade((float)Opacity.FadeOut, m_fadeDuration);
+                currentPerk.Destroy();
+            }
         }
-
-        m_finishedSliding = false;
     }
 
     private bool CheckSliding(RectTransform barRect, Vector2 targetPos, float tolerance)
@@ -132,5 +133,24 @@ public class PerkUIManager : MonoBehaviour
                 img.color = Color.clear;
             }
         }
+    }
+
+    public void ClearAllPerks()
+    {
+        //stop any lifetime coroutines
+        foreach (Coroutine coroutine in m_lifeTimeCoroutines)
+        {
+            if (coroutine != null)
+                StopCoroutine(coroutine);
+        }
+
+        foreach (PerkUI perkUI in m_perkQueue)
+        {
+            if (perkUI != null)
+                perkUI.Destroy();
+        }
+        
+        m_lifeTimeCoroutines.Clear();
+        m_perkQueue.Clear();
     }
 }

@@ -8,8 +8,11 @@ public class PerkData : ScriptableObject
     [field: SerializeField] private PerkTypes perkType;
     [Range(3, 100)] [field: SerializeField] private float rank;
     [field: SerializeField] private float duration;
+    [field: SerializeField] private float value;
     
     public PerkTypes GetPerkType() => perkType;
     public string GetName() => name;
     public float GetRank() => rank;
+    public float GetDuration() => duration;
+    public float GetValue() => value;
 }

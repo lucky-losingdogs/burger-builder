@@ -59,4 +59,6 @@ public class ItemSpawner : MonoBehaviour, IPointerClickHandler
         yield return new WaitForSeconds(m_cooldownDuration);
         m_cooling = false;
     }
+    
+    public ShapeData GetShape() => m_shape;
 }

@@ -20,3 +20,5 @@ MonoBehaviour:
   perks:
   - {fileID: 11400000, guid: 29a76d7cd749aa846a6e7cc9acf1fe89, type: 2}
   - {fileID: 11400000, guid: 8ff2b80b678fe784995ed13fe82da37f, type: 2}
+  shapes:
+  - {fileID: 11400000, guid: 8cc5de486f7159146ab90e5580c6b81a, type: 2}
