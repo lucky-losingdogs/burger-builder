@@ -83,7 +83,7 @@ public class TicketManager : ManagerParent<TicketData>
     public override void Reset()
     {
         base.Reset();
-        m_UIManager.RemoveAllTickets();
+        m_UIManager.Reset();
         m_ticketOrder.Clear();
         m_currentTicket = null;
         m_previousTicket = null;
@@ -219,14 +219,14 @@ public class TicketManager : ManagerParent<TicketData>
     {
         m_currentTicket = null;
         
-        yield return new WaitUntil(CheckQueue);
+        yield return new WaitUntil(() => m_ticketOrder.Count > 0);
 
-        m_currentTicket = m_ticketOrder.Dequeue();
+        if (m_ticketOrder.Count > 0)
+            m_currentTicket = m_ticketOrder.Dequeue();
     }
     
     #endregion
-
-    private bool CheckQueue() => m_ticketOrder.Count > 0;
+    
     public TicketData GetCurrentTicket() => m_currentTicket;
     public int GetCompletedTickets() => m_completedTickets;
     public TicketData GetPreviousCurrentTicket() => m_previousTicket;

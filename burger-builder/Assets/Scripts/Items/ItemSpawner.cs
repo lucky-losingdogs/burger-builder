@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -11,6 +12,8 @@ public class ItemSpawner : MonoBehaviour, IPointerClickHandler
     private bool m_cooling = false;
 
     private BoardRenderer m_boardRenderer;
+    
+    private float m_originalCooldownDuration;
 
     private void Start()
     {
@@ -19,6 +22,8 @@ public class ItemSpawner : MonoBehaviour, IPointerClickHandler
 
         //get variables from static manager
         m_boardRenderer = SpawnManager.s_instance.GetBoardRenderer();
+        
+        m_originalCooldownDuration = m_cooldownDuration;
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -61,4 +66,7 @@ public class ItemSpawner : MonoBehaviour, IPointerClickHandler
     }
     
     public ShapeData GetShape() => m_shape;
+    public float GetOriginalCooldown() => m_originalCooldownDuration;
+    public float GetCooldown() => m_cooldownDuration;
+    public void SetCooldown(float newCooldown) => m_cooldownDuration = newCooldown;
 }

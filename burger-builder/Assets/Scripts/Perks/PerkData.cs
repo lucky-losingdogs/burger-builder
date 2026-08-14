@@ -1,5 +1,9 @@
+using System;
 using UnityEngine;
-using Logic;
+
+#if UNITY_EDITOR
+    using UnityEditor;
+#endif
 
 [CreateAssetMenu(fileName = "PerkData", menuName = "Scriptable Objects/PerkData")]
 public class PerkData : ScriptableObject
@@ -15,4 +19,14 @@ public class PerkData : ScriptableObject
     public float GetRank() => rank;
     public float GetDuration() => duration;
     public float GetValue() => value;
+    
+#if UNITY_EDITOR
+
+    private void OnValidate()
+    {
+        if (duration < 0)
+            duration = 0;
+    }
+
+#endif
 }

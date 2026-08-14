@@ -65,11 +65,19 @@ namespace Logic
         }
     }
     
-    public class LowerItemSpawnLimit : PerkLogic
+    public class LowerItemCooldown : PerkLogic
     {
         public override void Effect(GameContext context, float duration, float value)
         {
-            
+            context.m_spawnManager.ChangeCooldown(duration, value);
+        }
+    }
+    
+    public class NullPerk : PerkLogic
+    {
+        public override void Effect(GameContext context, float duration, float value)
+        {
+            Debug.LogError("Perk Type not set!");
         }
     }
 }

@@ -13,16 +13,17 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private List<LevelData> m_allLevels = new List<LevelData>();
     private int m_currentLevel = 0;
+    private int m_selectedLevel = (int)NullIndex.NullLevel;
 
     private TicketManager m_ticketManager;
     private BoardRenderer m_boardRenderer;
     private ComboManager m_comboManager;
     private PerkManager m_perkManager;
+    private SpawnManager m_spawnManager;
 
     public static event Action<LevelData> OnLevelStart;
     public static event Action OnLevelEnd;
     public static event Action OnLevelEndEarly;
-    
     public static event Action<GameContext> OnContextCreated;
 
     #region Set Up
@@ -39,11 +40,20 @@ public class GameManager : MonoBehaviour
         m_ticketManager = FindFirstObjectByType<TicketManager>();
         m_boardRenderer = FindFirstObjectByType<BoardRenderer>();
         m_comboManager = FindFirstObjectByType<ComboManager>();
+        m_spawnManager = FindFirstObjectByType<SpawnManager>();
     }
 
     private void Start()
     {
         CreateGameContext();
+
+        //if loaded from level select, the selected level will be an actual index instead of null index
+        //set the current level to the selected level to load into the selected level
+        if (m_selectedLevel != (int)NullIndex.NullLevel)
+        {
+            Debug.Log("Selected Level: " + m_selectedLevel);
+            m_currentLevel = m_selectedLevel;
+        }
         
         OnLevelStart?.Invoke(m_allLevels[m_currentLevel]);
     }
@@ -58,9 +68,11 @@ public class GameManager : MonoBehaviour
         Timer.OnTimerFinished -= HandleTimerFinished;
     }
 
+    //create game context object containing managers
+    //for perk logic to access for their effects
     private void CreateGameContext()
     {
-        GameContext context = new GameContext(m_ticketManager, m_comboManager);
+        GameContext context = new GameContext(m_ticketManager, m_comboManager, m_spawnManager);
         OnContextCreated?.Invoke(context);
     }
 
@@ -116,7 +128,8 @@ public class GameManager : MonoBehaviour
         OnLevelEndEarly?.Invoke();
     }
 
-    public TicketData GetCurrentTicket() { return m_ticketManager.GetCurrentTicket(); }
+    public TicketData GetCurrentTicket() => m_ticketManager.GetCurrentTicket();
+    public void SetSelectedLevel(int index) => m_selectedLevel = index;
 
 #if UNITY_EDITOR
 

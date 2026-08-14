@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Random = UnityEngine.Random;
@@ -91,8 +93,7 @@ public class PerkManager : ManagerParent<PerkData>
         foreach (PerkData data in m_levelPerks)
         {
             float rank = data.GetRank();
-            Debug.Log("combo" + combo);
-            Debug.Log("rank"+rank);
+            
             if (combo >= rank)
             {
                 rankPerks.Add(data);
@@ -117,4 +118,29 @@ public class PerkManager : ManagerParent<PerkData>
         m_levelPerks = null;
         m_activePerk = null;
     }
+
+    #region Perk Behaviour
+    
+    //changes the value of something based on the perk's effect
+    //waits for the duration of the perks effect before returning value back to normal
+    public static IEnumerator C_EffectDuration(Action<float> addModifier, Action<float> removeModifier, float duration, float value)
+    {
+        addModifier(value);
+        yield return new WaitForSeconds(duration);
+        removeModifier(value);
+    }
+    
+    public static float Recalculate(List<float> modifierList, float originalValue)
+    {
+        float value = originalValue;
+
+        foreach (float modifier in modifierList)
+        {
+            value += modifier;
+        }
+
+        return Mathf.Max(0.01f, value);
+    }
+    
+    #endregion
 }

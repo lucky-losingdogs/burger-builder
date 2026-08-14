@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d484d7eba9231e45a3cc4e4b43dab6b, type: 3}
+  m_Name: Level02
+  m_EditorClassIdentifier: 
+  difficultyRange: 01000000
+  timeLimit: 45.2
+  ticketRequirement: 5
+  tickets:
+  - {fileID: 11400000, guid: 2a6bbd61a4c93014782f82834e3094a7, type: 2}
+  perks:
+  - {fileID: 11400000, guid: 29a76d7cd749aa846a6e7cc9acf1fe89, type: 2}
+  - {fileID: 11400000, guid: 8ff2b80b678fe784995ed13fe82da37f, type: 2}
+  shapes:
+  - {fileID: 11400000, guid: 8cc5de486f7159146ab90e5580c6b81a, type: 2}

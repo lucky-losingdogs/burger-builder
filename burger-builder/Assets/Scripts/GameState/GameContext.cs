@@ -5,12 +5,14 @@ public class GameContext
 {
     public TicketManager m_ticketManager { get; }
     public ComboManager m_comboManager { get; }
+    public SpawnManager m_spawnManager { get; }
 
     //provides references of managers to the perk logic
-    public GameContext(TicketManager ticketManager, ComboManager comboManager)
+    public GameContext(TicketManager ticketManager, ComboManager comboManager, SpawnManager spawnManager)
     {
         m_ticketManager = ticketManager;
         m_comboManager = comboManager;
+        m_spawnManager = spawnManager;
     }
 
     //getters

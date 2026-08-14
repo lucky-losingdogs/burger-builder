@@ -22,7 +22,8 @@ public static class Data
         { PerkTypes.DecreaseComboDecrement, new DecreaseComboDecrement() },
         { PerkTypes.IncreaseComboLimit, new IncreaseComboLimit() },
         { PerkTypes.ComboMultiplier, new ComboMultiplier() },
-        { PerkTypes.LowerItemSpawnLimit, new LowerItemSpawnLimit() },
+        { PerkTypes.LowerItemCooldown, new LowerItemCooldown() },
+        { PerkTypes.Null, new NullPerk() }
     };
 }
 
@@ -33,5 +34,6 @@ public enum Ingredients
 
 public enum PerkTypes
 {
-    ClearAllOfType, ClearAllTickets, DecreaseComboDecrement, IncreaseComboLimit, ComboMultiplier, LowerItemSpawnLimit
+    ClearAllOfType, ClearAllTickets, DecreaseComboDecrement, IncreaseComboLimit, ComboMultiplier,
+    LowerItemCooldown, Null
 }

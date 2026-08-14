@@ -12,6 +12,9 @@ public class SpawnManager : ManagerParent<ShapeData>
 
     private ShapeData[] m_levelShapes;
     private Dictionary<ShapeData, GameObject> m_spawnerDictionary = new Dictionary<ShapeData, GameObject>();
+    private List<ItemSpawner> m_activeSpawners = new List<ItemSpawner>();
+    
+    private List<float> m_spawnerCooldownModifiers = new List<float>();
 
     #region Set Up
     
@@ -69,6 +72,7 @@ public class SpawnManager : ManagerParent<ShapeData>
                 continue;
             
             m_spawnerDictionary.Add(shape, spawnerObject);
+            m_activeSpawners.Add(itemSpawner);
         }
     }
 
@@ -92,6 +96,36 @@ public class SpawnManager : ManagerParent<ShapeData>
         }
     }
 
+    #endregion
+    
+    #region Perk Behaviour
+    
+    public void ChangeCooldown(float duration, float value)
+    {
+        StartCoroutine(PerkManager.C_EffectDuration(AddCooldownModifier, RemoveCooldownModifier, duration, value));
+    }
+    
+    private void AddCooldownModifier(float value)
+    {
+        m_spawnerCooldownModifiers.Add(value);
+        RecalculateCooldown();
+    }
+
+    private void RemoveCooldownModifier(float value)
+    {
+        m_spawnerCooldownModifiers.Remove(value);
+        RecalculateCooldown();
+    }
+
+    private void RecalculateCooldown()
+    {
+        foreach (ItemSpawner itemSpawner in m_activeSpawners)
+        {
+            float newCooldown = PerkManager.Recalculate(m_spawnerCooldownModifiers, itemSpawner.GetCooldown());
+            itemSpawner.SetCooldown(newCooldown);
+        }
+    }
+    
     #endregion
     
     #region Getters

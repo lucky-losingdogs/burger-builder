@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,6 +15,7 @@ public class TicketUIManager : MonoBehaviour
     [SerializeField] private float m_padding = 5.0f;
 
     private List<GameObject> m_tickets = new List<GameObject>();
+    private int m_ticketNumber = 0;
 
     private float m_targetDown, m_targetLeft;
 
@@ -37,14 +38,23 @@ public class TicketUIManager : MonoBehaviour
         TicketUI ui = newTicket.GetComponent<TicketUI>();
         if (ui != null)
         { 
-            ui.Populate(data);
             m_tickets.Add(newTicket);
             
+            PopulateTicket(ui, data);
+                
             if (m_tickets.Count == 1)
                 SetFirstTicket();
             
             //StartCoroutine(C_AnimateTicket(newTicket, m_targetLeft));
         }
+    }
+
+    private void PopulateTicket(TicketUI ui, TicketData data)
+    {
+        ui.SetData(data);
+
+        m_ticketNumber++;
+        ui.SetNumber(m_ticketNumber.ToString());
     }
 
     //find the first ticket in the list with the data and remove it
@@ -91,6 +101,12 @@ public class TicketUIManager : MonoBehaviour
         //clear the list after the start index instead of a complete list clear
         if (m_tickets.Count > startIndex)
             m_tickets.RemoveRange(startIndex, m_tickets.Count - startIndex);
+    }
+
+    public void Reset()
+    {
+        RemoveAllTickets();
+        m_ticketNumber = 0;
     }
 
     //set ticket to the main ui ticket

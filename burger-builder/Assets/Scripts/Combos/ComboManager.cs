@@ -6,20 +6,19 @@ using System.Collections.Generic;
 public class ComboManager : MonoBehaviour
 {
     [Header("Combos")]
-    [SerializeField] private int m_comboTicketRequirement = 3; //the number of tickets completed within the combo time limit 
     [SerializeField] private float m_comboTimeLimit = 5.0f; // time limit that another ticket must be completed in before losing combo
     [SerializeField] private float m_comboDecrement = 0.5f;
     
     [Header("Perks")]
-    [SerializeField] private float m_perkComboRequirement = 3.0f;
+    [SerializeField] private float m_perkComboRequirement = 3.0f; //req at beginning
     [SerializeField] private float m_perkRequirementIncrement = 0.3f;
-    private float m_currentPerkRequirement = 0;
+    private float m_currentPerkRequirement = 0; //changes through level
 
     public static event Action<float> OnPerkAchieved;
 
+    private int m_clearedTickets = 0;
     private float m_comboTimer = 0.0f; // float representative of a timer
     private float m_currentCombo = 0.0f;
-    private int m_clearedTickets = 0;
     
     private float m_multiplier = 1.0f;
     
@@ -40,6 +39,8 @@ public class ComboManager : MonoBehaviour
     
     #endregion
 
+    #region Set Up
+    
     private void Awake()
     {
         m_UIManager = GetComponent<ComboUIManager>();
@@ -52,6 +53,13 @@ public class ComboManager : MonoBehaviour
         m_originalComboDecrement = m_comboDecrement;
     }
 
+    private void Start()
+    {
+        UpdateUIMax();
+    }
+    
+    #endregion
+
     //every time a ticket is cleared, the combo timer is reset back to the time limit
     public void TicketCleared()
     {
@@ -59,10 +67,10 @@ public class ComboManager : MonoBehaviour
         m_comboTimer = m_comboTimeLimit;
         
         if (c_comboTimer == null)
-            c_comboTimer = StartCoroutine(C_StartComboTimer(m_comboTicketRequirement));
+            c_comboTimer = StartCoroutine(C_StartComboTimer());
         
         //to start gaining combo, must clear 3 tickets within time limit
-        if (m_currentCombo > 0 || m_clearedTickets >= m_comboTicketRequirement)
+        if (m_currentCombo > 0 || m_clearedTickets >= 0)
         {
             IncreaseCombo(m_clearedTickets);
             m_clearedTickets = 0;
@@ -97,7 +105,13 @@ public class ComboManager : MonoBehaviour
             //increase perk requirement to be greater than combo
             m_currentPerkRequirement += m_perkComboRequirement + m_perkRequirementIncrement;
             OnPerkAchieved?.Invoke(comboValue);
+            UpdateUIMax();
         }
+    }
+
+    private void UpdateUIMax()
+    {
+        m_UIManager.SetPerkRequirement(m_currentPerkRequirement);
     }
     
     #region Perk Behaviour
@@ -106,32 +120,11 @@ public class ComboManager : MonoBehaviour
     //public functions are called by perk logic
     //</summary>
     
-    //changes the value of something based on the perk's effect
-    //waits for the duration of the perks effect before returning value back to normal
-    private IEnumerator C_EffectDuration(Action<float> addModifier, Action<float> removeModifier, float duration, float value)
-    {
-        addModifier(value);
-        yield return new WaitForSeconds(duration);
-        removeModifier(value);
-    }
-    
-    private float Recalculate(List<float> modifierList, float originalValue)
-    {
-        float value = originalValue;
-
-        foreach (float modifier in modifierList)
-        {
-            value += modifier;
-        }
-
-        return Mathf.Max(0.01f, value);
-    }
-    
     #region Combo Decrement
     
     public void DecreaseDecrement(float duration, float value)
     {
-        StartCoroutine(C_EffectDuration(AddComboDecrementModifier, RemoveComboDecrementModifier, duration, value));
+        StartCoroutine(PerkManager.C_EffectDuration(AddComboDecrementModifier, RemoveComboDecrementModifier, duration, value));
     }
     
     private void AddComboDecrementModifier(float value)
@@ -148,7 +141,7 @@ public class ComboManager : MonoBehaviour
 
     private void RecalculateComboDecrement()
     {
-        m_comboDecrement = Recalculate(m_comboDecrementModifiers, m_originalComboDecrement);
+        m_comboDecrement = PerkManager.Recalculate(m_comboDecrementModifiers, m_originalComboDecrement);
     }
     
     #endregion
@@ -158,7 +151,7 @@ public class ComboManager : MonoBehaviour
     public void IncreaseComboTimeLimit(float duration, float value)
     {
         //change the combo time limit and restore after the perk's duration
-        StartCoroutine(C_EffectDuration(AddComboTimeLimitModifier, RemoveComboTimeLimitModifier, duration, value));
+        StartCoroutine(PerkManager.C_EffectDuration(AddComboTimeLimitModifier, RemoveComboTimeLimitModifier, duration, value));
         
         //update the current running combo timer based on the value, but don't restore it after duration
         //as after duration it should not be reset 
@@ -187,7 +180,7 @@ public class ComboManager : MonoBehaviour
 
     private void RecalculateComboTimeLimit()
     {
-        m_comboTimeLimit = Recalculate(m_comboTimeLimitModifiers, m_originalComboTimeLimit);
+        m_comboTimeLimit = PerkManager.Recalculate(m_comboTimeLimitModifiers, m_originalComboTimeLimit);
     }
     
     #endregion
@@ -196,7 +189,7 @@ public class ComboManager : MonoBehaviour
     
     public void IncreaseMultiplier(float duration, float value)
     {
-        StartCoroutine(C_EffectDuration(AddMultiplierModifier, RemoveMultiplierModifier, duration, value));
+        StartCoroutine(PerkManager.C_EffectDuration(AddMultiplierModifier, RemoveMultiplierModifier, duration, value));
     }
     
     private void AddMultiplierModifier(float value)
@@ -213,22 +206,15 @@ public class ComboManager : MonoBehaviour
 
     private void RecalculateMultiplier()
     {
-        m_multiplier = Recalculate(m_multiplierModifiers, m_originalMultiplier);
+        m_multiplier = PerkManager.Recalculate(m_multiplierModifiers, m_originalMultiplier);
     }
     
     #endregion
-
-    private void Update()
-    {
-        Debug.Log($"combo decrement: {m_comboDecrement}");
-        Debug.Log($"combo time limit: {m_comboTimeLimit}");
-        Debug.Log($"multiplier: {m_multiplier}");
-    }
 
     #endregion
     
     //coroutine to continuously decrease from the timer float
-    private IEnumerator C_StartComboTimer(int ticketReq = 1)
+    private IEnumerator C_StartComboTimer()
     {
         while (m_comboTimer > 0)
         {
@@ -247,8 +233,8 @@ public class ComboManager : MonoBehaviour
     {
         while (m_currentCombo > 0)
         {
-            SetCombo(m_currentCombo - m_comboDecrement);
             m_currentPerkRequirement -= m_comboDecrement;
+            SetCombo(m_currentCombo - m_comboDecrement);
             yield return new WaitForSeconds(0.3f);
         }
 

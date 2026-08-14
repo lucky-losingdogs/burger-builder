@@ -9,11 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7883e7e8de9ec9f4d9b00951da27c8a4, type: 3}
-  m_Name: DebugPerk
+  m_Script: {fileID: 11500000, guid: bcedb4895f9d4207be259903cbac0c2e, type: 3}
+  m_Name: StartMenu
   m_EditorClassIdentifier: 
-  name: Clear All Tickets
-  perkType: 6
-  rank: 3
-  duration: 20
-  value: -0.5
+  sceneName: 
