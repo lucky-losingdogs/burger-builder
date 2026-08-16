@@ -15,6 +15,8 @@ public class PerkManager : ManagerParent<PerkData>
 
     private PerkData m_activePerk = null;
     
+    private List<PerkData> m_activePerks = new List<PerkData>();
+    
     #region Set Up
 
     private void Awake()

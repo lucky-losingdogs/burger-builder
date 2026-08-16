@@ -9,20 +9,18 @@ public class ExitMenu : MonoBehaviour, IPointerClickHandler
     
     public static event Action OnClickOff;
 
-    private bool m_clickingEnabled = false;
+    private static bool m_clickingEnabled = false;
 
     private void OnEnable()
     {
-        StartMenu.OnTitleLoaded += EnableClicking;
-        
+        if (m_anyKeyboard == null)
+            return;
         m_anyKeyboard.action.Enable();
         m_anyKeyboard.action.performed += OnAnyKeyboard;
     }
 
     private void OnDisable()
     {
-        StartMenu.OnTitleLoaded -= EnableClicking;
-
         DisableKeyboard();
     }
 
@@ -47,13 +45,16 @@ public class ExitMenu : MonoBehaviour, IPointerClickHandler
     }
 
     //only enable clicking after text has finished fading in
-    private void EnableClicking()
+    public static void EnableClicking()
     {
         m_clickingEnabled = true;
+        Debug.Log(m_clickingEnabled);
     }
     
     private void DisableKeyboard()
     {
+        if (m_anyKeyboard == null)
+            return;
         m_anyKeyboard.action.Disable();
         m_anyKeyboard.action.performed -= OnAnyKeyboard;
     }

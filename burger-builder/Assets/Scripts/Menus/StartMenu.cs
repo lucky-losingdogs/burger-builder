@@ -7,10 +7,6 @@ using UnityEngine.SceneManagement;
 
 public class StartMenu : MenuParent
 {
-    [Header("Object References")]
-    [SerializeField] private GameObject m_mainPanel;
-    [SerializeField] private GameObject m_optionsPanel;
-    [SerializeField] private GameObject m_levelSelectPanel;
     [SerializeField] private GameObject m_title;
     [SerializeField] private GameObject m_promptText;
     
@@ -34,26 +30,19 @@ public class StartMenu : MenuParent
         StartDisplay();
     }
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
-        ExitMenu.OnClickOff += HandleClickOff;
+        base.OnEnable();
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void OnDisable()
     {
-        ExitMenu.OnClickOff -= HandleClickOff;
+        base.OnDisable();
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     #endregion
-
-    //when player clicks on background or back button,
-    //set menus to the default menu display
-    public void HandleClickOff()
-    {
-        DefaultDisplay();
-    }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -104,43 +93,18 @@ public class StartMenu : MenuParent
     private IEnumerator C_EnableClicking()
     {
         yield return new WaitUntil(() => m_isFinishedFading);
-        
-        OnTitleLoaded?.Invoke();
+
+        ExitMenu.EnableClicking();
     }
     
     #endregion
     
     #region Toggles
-
-    public void ToggleMenuPanel()
+    
+    public override void ToggleMenuPanel()
     {
         m_mainPanel.SetActive(!m_mainPanel.activeSelf);
         ToggleTitle(m_mainPanel.activeSelf);
-    }
-    
-    public void ToggleMenuPanel(bool show)
-    {
-        m_mainPanel.SetActive(show);
-    }
-
-    public void ToggleOptionsPanel()
-    {
-        m_optionsPanel.SetActive(!m_optionsPanel.activeSelf);
-    }
-    
-    public void ToggleOptionsPanel(bool show)
-    {
-        m_optionsPanel.SetActive(show);
-    }
-    
-    public void ToggleLevelSelectPanel()
-    {
-        m_levelSelectPanel.SetActive(!m_levelSelectPanel.activeSelf);
-    }
-    
-    public void ToggleLevelSelectPanel(bool show)
-    {
-        m_levelSelectPanel.SetActive(show);
     }
     
     public void ToggleTitle(bool show)
@@ -155,7 +119,7 @@ public class StartMenu : MenuParent
 
     //the default display with the menu panel and title visible
     //used when clicking back to display all buttons
-    private void DefaultDisplay()
+    protected override void DefaultDisplay()
     {
         ToggleMenuPanel(true);
         ToggleTitle(true);
@@ -166,11 +130,9 @@ public class StartMenu : MenuParent
     
     //display when game loads
     //all menus are disabled and opacity of text is set to 0 to fade into 1
-    private void StartDisplay()
+    protected override void StartDisplay()
     {
-        ToggleMenuPanel(false);
-        ToggleOptionsPanel(false);
-        ToggleLevelSelectPanel(false);
+        base.StartDisplay();
         
         m_titleUI.color = ChangeOpacity(m_titleUI.color, 0);
         m_promptUI.color = ChangeOpacity(m_promptUI.color, 0);
