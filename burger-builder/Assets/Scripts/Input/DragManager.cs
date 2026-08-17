@@ -170,6 +170,8 @@ public class DragManager : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
         }
     }
 
+    #region Rotation
+    
     //subscribed to E keyboard key
     private void RotateItemNext()
     {
@@ -196,6 +198,8 @@ public class DragManager : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
         //set item on board renderer
         SetItem(m_currentItem.GetPosition());
     }
+    
+    #endregion
 
     private void CheckCompletedTicket()
     {

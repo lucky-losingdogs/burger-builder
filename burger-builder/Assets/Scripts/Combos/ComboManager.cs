@@ -57,11 +57,21 @@ public class ComboManager : MonoBehaviour
     {
         UpdateUIMax();
     }
-    
+
+    private void OnEnable()
+    {
+        GameManager.OnTicketCleared += HandleTicketCleared;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.OnTicketCleared -= HandleTicketCleared;
+    }
+
     #endregion
 
     //every time a ticket is cleared, the combo timer is reset back to the time limit
-    public void TicketCleared()
+    private void HandleTicketCleared()
     {
         m_clearedTickets++;
         m_comboTimer = m_comboTimeLimit;

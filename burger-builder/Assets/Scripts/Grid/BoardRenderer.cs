@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
@@ -24,6 +25,18 @@ public class BoardRenderer : MonoBehaviour
     {
         m_tilemap = GetComponentInChildren<Tilemap>();
         m_bounds = CalculateBounds();
+    }
+
+    private void OnEnable()
+    {
+        GameManager.OnTicketCleared += ClearAllTiles;
+        GameManager.OnLevelEnd += ClearAllTiles;
+    }
+    
+    private void OnDisable()
+    {
+        GameManager.OnTicketCleared -= ClearAllTiles;
+        GameManager.OnLevelEnd -= ClearAllTiles;
     }
 
     #endregion

@@ -32,7 +32,7 @@ public class LevelData : ScriptableObject
 
     private void OnValidate()
     {
-        UpdateTickets();
+        FillLevelData();
     }
 
     //<summary>
@@ -61,10 +61,18 @@ public class LevelData : ScriptableObject
         return Utilities.LoadList<T>(folderPath);
     }
 
-    private void UpdateTickets()
+    //remove duplicates so it doesn't try to have multiple of the same spawner active (or throw error)
+    private ShapeData[] HashsetShapeData(ShapeData[] shapeDataArr)
+    {
+        HashSet<ShapeData> hashSet = shapeDataArr.ToHashSet();
+        return hashSet.ToArray();
+    }
+
+    private void FillLevelData()
     {
         tickets = LoadTickets().ToArray();
         perks = LoadAll<PerkData>("Perks").ToArray();
+        shapes = HashsetShapeData(shapes);
     }
 
 #endif

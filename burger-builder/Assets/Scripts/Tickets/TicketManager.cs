@@ -33,6 +33,8 @@ public class TicketManager : ManagerParent<TicketData>
     {
         base.OnEnable();
         GameManager.OnLevelEndEarly += HandleLevelEndEarly;
+        GameManager.OnTicketCleared += NewTicket;
+        GameManager.OnLevelEnd += Reset;
 
         DragManager.OnItemDropped += CheckCompletedTicket;
     }
@@ -41,6 +43,8 @@ public class TicketManager : ManagerParent<TicketData>
     {
         base.OnDisable();
         GameManager.OnLevelEndEarly -= HandleLevelEndEarly;
+        GameManager.OnTicketCleared -= NewTicket;
+        GameManager.OnLevelEnd -= Reset;
         
         DragManager.OnItemDropped -= CheckCompletedTicket;
     }
@@ -67,7 +71,7 @@ public class TicketManager : ManagerParent<TicketData>
 
     #endregion
 
-    public void NewTicket()
+    private void NewTicket()
     {
         m_previousTicket = m_currentTicket;
         
@@ -132,10 +136,9 @@ public class TicketManager : ManagerParent<TicketData>
         
         ItemStructure[] ticketItems = currentTicket.GetItems();
         
-        if (currentTicket != null && CheckItemCount(boardRenderer, ticketItems))
+        if (CheckItemCount(boardRenderer, ticketItems) && CheckItemPositions(boardRenderer, ticketItems))
         {
-            if (CheckItemPositions(boardRenderer, ticketItems))
-                GameManager.s_instance.TicketCleared();
+            GameManager.s_instance.HandleTicketCleared();
         }
     }
     
@@ -147,37 +150,49 @@ public class TicketManager : ManagerParent<TicketData>
     
     public bool CheckItemPositions(BoardRenderer boardRenderer, ItemStructure[] ticketItems)
     {
-        int occupiedTilesCount = boardRenderer.GetOccupiedTilesCount();
+        int totalUnmatchedTiles = boardRenderer.GetOccupiedTilesCount();
         int matches = 0;
-
+    
         //go through list of items
-        for (int i = 0; i < ticketItems.Length; i++)
+        foreach (ItemStructure ticketItem in ticketItems)
         {
             //check if the item map contains an item at the required position
-            Vector3Int ticketPos = ConvertTicketPositions(ticketItems[i].position, ticketItems[i].GetAnchorOffset());
+            Vector3Int ticketPos = ConvertTicketPositionToBoard(ticketItem.position, ticketItem.GetAnchorOffset());
             Item item = boardRenderer.CheckItem(ticketPos);
             
             //check if the shape of the item on the map matches the required item & required rotation
-            if (ItemChecker(item, ticketItems[i]))
+            if (ItemChecker(item, ticketItem))
             {
+                //get cells for the ticket item, convert to board coordinates
+                Vector3Int[] ticketCells = ticketItem.GetCells().Select(cell => ConvertTicketCellToBoard(cell,ticketItem.position)).ToArray();
+                HashSet<Vector3Int> itemCells = item.GetCells().Select(cell => cell + item.GetPosition()).ToHashSet();
+                
                 matches++;
-
+    
+                //check if each cell is in the correct position
                 //for each cell in the item, subtract from the number of total tiles there should be
-                foreach (Vector3Int cell in ticketItems[i].cells)
+                foreach (Vector3Int ticketCell in ticketCells)
                 {
-                    occupiedTilesCount--;
+                    if (itemCells.Contains(ticketCell))
+                        totalUnmatchedTiles--;
                 }
             }
         }
-
+    
         //if the number of correct items is the number of required items
-        return matches == ticketItems.Length && occupiedTilesCount == 0;
+        return matches == ticketItems.Length && totalUnmatchedTiles == 0;
     }
 
     //convert from ticket ui tilemap coords into actual tilemap coords
-    private Vector3Int ConvertTicketPositions(Vector3Int ticketPos, Vector3Int anchorOffset)
+    private Vector3Int ConvertTicketPositionToBoard(Vector3Int ticketPos, Vector3Int anchorOffset)
     {
         return ticketPos + globalAnchorOffset + anchorOffset;
+    }
+    
+    //convert cells from relative positions to actual tilemap coords based on the ticket pos + global offset
+    private Vector3Int ConvertTicketCellToBoard(Vector3Int ticketCell, Vector3Int ticketPos)
+    {
+        return ticketCell + globalAnchorOffset + ticketPos;
     }
 
     private bool ItemChecker(Item boardItem, ItemStructure ticketItem)

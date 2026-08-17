@@ -29,6 +29,7 @@ public class PerkManager : ManagerParent<PerkData>
         base.OnEnable();
         ComboManager.OnPerkAchieved += HandlePerkAchieved;
         GameManager.OnContextCreated += SetGameContext;
+        GameManager.OnLevelEnd += Reset;
     }
     
     protected override void OnDisable()
@@ -36,6 +37,7 @@ public class PerkManager : ManagerParent<PerkData>
         base.OnDisable();
         ComboManager.OnPerkAchieved -= HandlePerkAchieved;
         GameManager.OnContextCreated -= SetGameContext;
+        GameManager.OnLevelEnd -= Reset;
     }
 
     protected override List<PerkData> GetRawData(LevelData levelData)

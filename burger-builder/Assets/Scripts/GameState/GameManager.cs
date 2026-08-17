@@ -20,11 +20,13 @@ public class GameManager : MonoBehaviour
     private ComboManager m_comboManager;
     private PerkManager m_perkManager;
     private SpawnManager m_spawnManager;
+    private TicketRequirementUI m_ticketRequirementUI;
 
     public static event Action<LevelData> OnLevelStart;
     public static event Action OnLevelEnd;
     public static event Action OnLevelEndEarly;
     public static event Action<GameContext> OnContextCreated;
+    public static event Action OnTicketCleared;
 
     #region Set Up
     
@@ -41,6 +43,7 @@ public class GameManager : MonoBehaviour
         m_boardRenderer = FindFirstObjectByType<BoardRenderer>();
         m_comboManager = FindFirstObjectByType<ComboManager>();
         m_spawnManager = FindFirstObjectByType<SpawnManager>();
+        m_ticketRequirementUI = FindFirstObjectByType<TicketRequirementUI>();
     }
 
     private void Start()
@@ -79,14 +82,13 @@ public class GameManager : MonoBehaviour
     #endregion
 
     //if the ticket is finished set a new current ticket and clear all the tiles from the tilemap
-    public void TicketCleared()
+    public void HandleTicketCleared()
     {
-        m_ticketManager.NewTicket();
-        m_boardRenderer.ClearAllTiles();
-        m_comboManager.TicketCleared();
+        OnTicketCleared?.Invoke();
     }
 
     //triggered when next lvl button is pressed on win menu
+    //increases current level index so the next level is loaded
     public void HandleNextLevel()
     {
         //increment the current lvl index
@@ -95,6 +97,7 @@ public class GameManager : MonoBehaviour
     }
 
     //triggered when retry lvl button is pressed on fail menu
+    //does not increase current level index so the same level is loaded again
     public void HandleRetryLevel()
     {
         StartLevel();
@@ -109,9 +112,6 @@ public class GameManager : MonoBehaviour
 
     private void ClearLevel()
     {
-        m_boardRenderer.ClearAllTiles();
-        m_ticketManager.Reset();
-        m_perkManager.Reset();
         OnLevelEnd?.Invoke();
     }
 
