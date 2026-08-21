@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using Logic;
-
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -11,6 +9,7 @@ using UnityEditor;
 [CreateAssetMenu(fileName = "LevelData", menuName = "Scriptable Objects/LevelData")]
 public class LevelData : ScriptableObject
 {
+    [field: SerializeField] private int level;
     [Range(1, 5)]
     [field: SerializeField] private int[] difficultyRange;
     [Range(5.0f, 60.0f)]
@@ -19,11 +18,12 @@ public class LevelData : ScriptableObject
 
     [SerializeField] private TicketData[] tickets;
     [SerializeField] private PerkData[] perks;
-    [SerializeField] private ShapeData[] shapes;
+    [field: SerializeField] private ShapeData[] shapes;
 
+    public int GetLevel() { return level; }
     public TicketData[] GetTickets() { return tickets; }
     public PerkData[] GetPerks() { return perks; }
-    public ShapeData[] GetShapes() { return shapes; }
+    public ShapeData[] GetShapes() { return shapes.Distinct().ToArray(); } //remove duplicate shapes
     public float GetTimeLimit() { return timeLimit; }
     public int GetTicketRequirement() { return ticketRequirement; }
     public float GetDifficulty() { return (float)difficultyRange.Average(); }
@@ -61,18 +61,10 @@ public class LevelData : ScriptableObject
         return Utilities.LoadList<T>(folderPath);
     }
 
-    //remove duplicates so it doesn't try to have multiple of the same spawner active (or throw error)
-    private ShapeData[] HashsetShapeData(ShapeData[] shapeDataArr)
-    {
-        HashSet<ShapeData> hashSet = shapeDataArr.ToHashSet();
-        return hashSet.ToArray();
-    }
-
     private void FillLevelData()
     {
         tickets = LoadTickets().ToArray();
         perks = LoadAll<PerkData>("Perks").ToArray();
-        shapes = HashsetShapeData(shapes);
     }
 
 #endif

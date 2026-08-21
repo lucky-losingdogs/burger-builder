@@ -15,12 +15,14 @@ public class TicketRequirementUI : MonoBehaviour
     {
         LevelManager.OnLevelStart += HandleLevelStart;
         LevelManager.OnTicketCleared += UpdateRequirementUI;
+        LevelManager.OnTicketsCleared += UpdateRequirementUI;
     }
 
     private void OnDisable()
     {
         LevelManager.OnLevelStart -= HandleLevelStart;
         LevelManager.OnTicketCleared -= UpdateRequirementUI;
+        LevelManager.OnTicketsCleared -= UpdateRequirementUI;
     }
 
     private void HandleLevelStart(LevelData levelData)
@@ -36,6 +38,12 @@ public class TicketRequirementUI : MonoBehaviour
     private void UpdateRequirementUI()
     {
         m_currentTicketRequirement = Mathf.Clamp(m_currentTicketRequirement - 1, 0, m_ticketRequirement);
+        m_ticketRequirementUI.text = m_currentTicketRequirement.ToString();
+    }
+    
+    private void UpdateRequirementUI(int clearedTickets)
+    {
+        m_currentTicketRequirement = Mathf.Clamp(m_currentTicketRequirement - clearedTickets, 0, m_ticketRequirement);
         m_ticketRequirementUI.text = m_currentTicketRequirement.ToString();
     }
 }

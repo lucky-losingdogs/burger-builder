@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DebugPerk
   m_EditorClassIdentifier: 
   name: Clear All Tickets
-  perkType: 6
+  perkType: 1
   rank: 3
-  duration: 20
-  value: -0.5
+  duration: 0
+  value: 0

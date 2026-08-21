@@ -61,11 +61,13 @@ public class ComboManager : MonoBehaviour
     private void OnEnable()
     {
         LevelManager.OnTicketCleared += HandleTicketCleared;
+        LevelManager.OnTicketsCleared += HandleTicketsCleared;
     }
 
     private void OnDisable()
     {
         LevelManager.OnTicketCleared -= HandleTicketCleared;
+        LevelManager.OnTicketsCleared -= HandleTicketsCleared;
     }
 
     #endregion
@@ -79,11 +81,18 @@ public class ComboManager : MonoBehaviour
         if (c_comboTimer == null)
             c_comboTimer = StartCoroutine(C_StartComboTimer());
         
-        //to start gaining combo, must clear 3 tickets within time limit
         if (m_currentCombo > 0 || m_clearedTickets >= 0)
         {
             IncreaseCombo(m_clearedTickets);
             m_clearedTickets = 0;
+        }
+    }
+
+    private void HandleTicketsCleared(int ticketsCleared)
+    {
+        for (int i = 1; i < ticketsCleared; i++)
+        {
+            HandleTicketCleared();
         }
     }
 

@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Utilities
@@ -6,8 +8,13 @@ public class Utilities
     //return the scriptable objects in the folder path as a list
     public static List<T> LoadList<T>(string folderPath) where T : UnityEngine.Object
     {
-        T[] objectsArr = Resources.LoadAll<T>(folderPath);
-        return new List<T>(objectsArr);
+        return Resources.LoadAll<T>(folderPath).ToList();
+    }
+    
+    //return the scriptable objects in the folder path as an ordered list
+    public static List<T> LoadList<T>(string folderPath,Func<T, int> orderBy) where T : UnityEngine.Object
+    {
+        return Resources.LoadAll<T>(folderPath).OrderBy(orderBy).ToList();
     }
 
     //return the scriptable objects in the folder path as an array

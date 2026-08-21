@@ -102,18 +102,25 @@ public class TicketManager : ManagerParent<TicketData>
     // and clear the ui tickets, setting the start index at 1 to skip the current ticket ui
     public void ClearTicketQueue()
     {
+        //get number of tickets in the queue that are going to be cleared
+        int clearedTickets = m_ticketOrder.Count;
+        
         m_ticketOrder.Clear();
         m_UIManager.RemoveAllTickets(1);
+
+        MultipleTicketsCleared(clearedTickets);
     }
 
     public void ClearByTicketType(TicketData ticketToClear)
     {
+        int clearedTickets = 0;
         Queue<TicketData> newQueue = new Queue<TicketData>();
 
         foreach (TicketData ticket in m_ticketOrder)
         {
             if (ticket == ticketToClear)
             {
+                clearedTickets++;
                 m_UIManager.RemoveTicket(ticket);
             }
             else
@@ -123,6 +130,20 @@ public class TicketManager : ManagerParent<TicketData>
         }
 
         m_ticketOrder = newQueue;
+        
+        MultipleTicketsCleared(clearedTickets);
+    }
+
+    private void MultipleTicketsCleared(int clearedTickets)
+    {
+        //increase completed ticket count
+        m_completedTickets += clearedTickets;
+        
+        //update combo and ticket req ui
+        LevelManager.s_instance.HandleTicketsCleared(clearedTickets);
+        
+        //ensure the current ticket is set again after clearing queue
+        StartCoroutine(C_SetCurrentTicket());
     }
     
     #endregion

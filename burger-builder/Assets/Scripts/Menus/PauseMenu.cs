@@ -12,6 +12,7 @@ public class PauseMenu : MenuParent
 
     private void Start()
     {
+        ExitMenu.EnableClicking();
         StartDisplay();
     }
     
@@ -21,6 +22,8 @@ public class PauseMenu : MenuParent
         
         m_openMenu.action.Enable();
         m_openMenu.action.performed += HandleOpenMenu;
+
+        LevelManager.OnLevelEnd += StartDisplay;
     }
 
     private void OnDisable()
@@ -29,6 +32,8 @@ public class PauseMenu : MenuParent
         
         m_openMenu.action.Disable();
         m_openMenu.action.performed -= HandleOpenMenu;
+        
+        LevelManager.OnLevelEnd -= StartDisplay;
     }
     
     #endregion
@@ -48,10 +53,9 @@ public class PauseMenu : MenuParent
 
     protected override void StartDisplay()
     {
-        ToggleMenuPanel(true);
+        ToggleMenuPanel(false);
         ToggleOptionsPanel(false);
         ToggleLevelSelectPanel(false);
-        ToggleMenuBackground(false);
     }
 
     public void ToggleMenuBackground()

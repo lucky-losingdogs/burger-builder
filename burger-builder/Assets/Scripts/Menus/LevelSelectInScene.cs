@@ -11,6 +11,7 @@ public class LevelSelectInScene : MenuParent, ILoadableSaveData
     
     private Button[] m_levelButtons = Array.Empty<Button>();
     [SerializeField] private List<LevelData> m_allLevels = new List<LevelData>();
+    [SerializeField] private List<LevelData> m_unlockedLevels = new List<LevelData>();
 
     #region  Set up
 
@@ -44,6 +45,14 @@ public class LevelSelectInScene : MenuParent, ILoadableSaveData
         return tempButtonList;
     }
 
+    private void HideLevelButtons()
+    {
+        for (int i = m_unlockedLevels.Count; i < m_levelButtons.Length; i++)
+        {
+            m_levelButtons[i].gameObject.SetActive(false);
+        }
+    }
+
     //each button on click triggers the function and passes the index it is in the array as the level index
     protected override void OnEnable()
     {
@@ -62,10 +71,13 @@ public class LevelSelectInScene : MenuParent, ILoadableSaveData
     public void HandleSaveLoaded(SaveData saveData)
     {
         int highestLevel = saveData.highestLevel;
-        m_allLevels = (this as ILoadableSaveData).GetList(highestLevel);
+        // int highestLevel = 1;
+        m_allLevels = (this as ILoadableSaveData).GetAllLevels();
+        m_unlockedLevels = (this as ILoadableSaveData).GetUnlockedLevels(highestLevel);
         
         m_levelButtons = SpawnLevelButtons().ToArray();
         BindLevelButtons();
+        HideLevelButtons();
     }
     
     private void BindLevelButtons()
@@ -90,6 +102,7 @@ public class LevelSelectInScene : MenuParent, ILoadableSaveData
     {
         Debug.Log("Switch to level: " + index);
         LevelManager.s_instance.SetSelectedLevel(index);
+        LevelManager.s_instance.ReloadLevel();
     }
 
     private void ClearLevelButtons()

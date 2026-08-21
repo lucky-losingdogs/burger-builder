@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+#if UNITY_EDITOR
+    using UnityEditor;
+#endif
+
 public class SaveManager : MonoBehaviour
 {
     public static SaveManager s_instance;
@@ -22,7 +26,7 @@ public class SaveManager : MonoBehaviour
 
         s_instance = this;
         DontDestroyOnLoad(gameObject);
-        SaveSystem.DeleteSave();
+        
         LoadSave();
     }
 
@@ -78,16 +82,28 @@ public class SaveManager : MonoBehaviour
     }
     
     public SaveData GetSaveData() => saveData;
+    
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        SaveSystem.DeleteSave();
+    }
+#endif
 }
 
 public interface ILoadableSaveData
 {
     public void HandleSaveLoaded(SaveData saveData);
 
-    public List<LevelData> GetList(int highestLevel)
+    public List<LevelData> GetUnlockedLevels(int highestLevel)
     {
-        List<LevelData> allLevels = Utilities.LoadList<LevelData>("Levels");
-        allLevels = Utilities.TrimExcess(allLevels, highestLevel + 1);
-        return allLevels;
+        List<LevelData> unlockedLevels = GetAllLevels();
+        unlockedLevels = Utilities.TrimExcess(unlockedLevels, highestLevel + 1);
+        return unlockedLevels;
+    }
+
+    public List<LevelData> GetAllLevels()
+    {
+        return Utilities.LoadList<LevelData>("Levels", x => x.GetLevel());
     }
 }

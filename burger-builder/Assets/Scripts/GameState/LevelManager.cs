@@ -27,6 +27,7 @@ public class LevelManager : MonoBehaviour
     public static event Action OnLevelEndEarly;
     public static event Action<GameContext> OnContextCreated;
     public static event Action OnTicketCleared;
+    public static event Action<int> OnTicketsCleared;
 
     #region Set Up
     
@@ -50,14 +51,9 @@ public class LevelManager : MonoBehaviour
     {
         CreateGameContext();
 
-        //if loaded from level select, the selected level will be an actual index instead of null index
-        //set the current level to the selected level to load into the selected level
-        if (m_selectedLevel != (int)NullIndex.NullLevel)
-        {
-            Debug.Log("Selected Level: " + m_selectedLevel);
-            m_currentLevel = m_selectedLevel;
-        }
-
+        if (m_allLevels.Count <= 0)
+            LoadLevels();
+        
         HandleLevelStart();
     }
 
@@ -85,6 +81,11 @@ public class LevelManager : MonoBehaviour
     public void HandleTicketCleared()
     {
         OnTicketCleared?.Invoke();
+    }
+
+    public void HandleTicketsCleared(int ticketsCleared)
+    {
+        OnTicketsCleared?.Invoke(ticketsCleared);
     }
 
     //triggered when next lvl button is pressed on win menu
@@ -130,11 +131,34 @@ public class LevelManager : MonoBehaviour
 
     private void HandleLevelStart()
     {
-        Debug.Log(m_currentLevel);
+        CheckLevelSelection();
+        
         if (m_currentLevel > m_allLevels.Count)
             m_currentLevel = m_allLevels.Count;
                 
         OnLevelStart?.Invoke(m_allLevels[m_currentLevel]);
+    }
+
+    private void CheckLevelSelection()
+    {
+        //if loaded from level select, the selected level will be an actual index instead of null index
+        //set the current level to the selected level to load into the selected level
+        if (m_selectedLevel != (int)NullIndex.NullLevel)
+        {
+            Debug.Log("Selected Level: " + m_selectedLevel);
+            m_currentLevel = m_selectedLevel;
+        }
+    }
+
+    public void ReloadLevel()
+    {
+        OnLevelEndEarly?.Invoke();
+        StartLevel();
+    }
+
+    private void LoadLevels()
+    {
+        m_allLevels = Utilities.LoadList<LevelData>("Levels", x => x.GetLevel());
     }
 
     public TicketData GetCurrentTicket() => m_ticketManager.GetCurrentTicket();
@@ -145,7 +169,7 @@ public class LevelManager : MonoBehaviour
 
     private void OnValidate()
     {
-        m_allLevels = Utilities.LoadList<LevelData>("Levels");
+        LoadLevels();
     }
 
 #endif

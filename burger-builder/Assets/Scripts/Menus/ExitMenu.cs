@@ -48,7 +48,7 @@ public class ExitMenu : MonoBehaviour, IPointerClickHandler
     public static void EnableClicking()
     {
         m_clickingEnabled = true;
-        Debug.Log(m_clickingEnabled);
+        Debug.Log("Clicking enabled"+m_clickingEnabled);
     }
     
     private void DisableKeyboard()

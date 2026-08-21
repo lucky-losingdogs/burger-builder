@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-public class LevelSelect : LevelSelectInScene
+public class LevelSelectOutScene : LevelSelectInScene
 {
     [SerializeField] private GameObject m_targetLevelPrefab;
 

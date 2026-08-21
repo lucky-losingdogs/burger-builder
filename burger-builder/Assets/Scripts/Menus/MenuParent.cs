@@ -48,6 +48,7 @@ public class MenuParent : MonoBehaviour
     private void ResetTimeScale()
     {
         Time.timeScale = 1;
+        Debug.Log(Time.timeScale);
     }
     
     //when player clicks on background or back button,
