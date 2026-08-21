@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using System.IO;
 
@@ -5,21 +6,17 @@ using System.IO;
 public struct SaveData
 {
     public int highestLevel;
+    public int other;
 }
 
 public static class SaveSystem
 {
     private static string SavePath => Path.Combine(Application.persistentDataPath, "save.dat");
 
-    public static void SaveGame(int highestLevel)
+    public static void SaveGame(SaveData data)
     {
-        SaveData data = new SaveData
-        {
-            highestLevel = highestLevel
-        };
-
         //create, open and close a stream
-        using (FileStream stream = new FileStream(SavePath, FileMode.Create))
+        using (FileStream stream = new FileStream(SavePath, FileMode.OpenOrCreate))
         {
             //write to stream in binary
             using (BinaryWriter writer = new BinaryWriter(stream))
@@ -34,13 +31,13 @@ public static class SaveSystem
     public static SaveData LoadGame()
     {
         //if there is no save file, create a new one
-        if (!File.Exists(SavePath))
+        if (!HasSave())
         {
             Debug.Log("No save file found.");
 
             return new SaveData
             {
-                highestLevel = 1
+                highestLevel = 0
             };
         }
 
@@ -65,7 +62,7 @@ public static class SaveSystem
 
             return new SaveData
             {
-                highestLevel = 1
+                highestLevel = 0
             };
         }
     }
@@ -78,10 +75,17 @@ public static class SaveSystem
 
     public static void DeleteSave()
     {
-        if (File.Exists(SavePath))
+        if (HasSave())
         {
             File.Delete(SavePath);
             Debug.Log("Save deleted.");
         }
+    }
+
+    public static SaveData UpdateSavedLevel(SaveData oldData, int highestLevel)
+    {
+        SaveData data = oldData;
+        data.highestLevel = highestLevel;
+        return data;
     }
 }

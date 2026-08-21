@@ -203,7 +203,7 @@ public class DragManager : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
 
     private void CheckCompletedTicket()
     {
-        TicketData currentTicket = GameManager.s_instance.GetCurrentTicket();
+        TicketData currentTicket = LevelManager.s_instance.GetCurrentTicket();
         OnItemDropped?.Invoke(currentTicket, m_boardRenderer);
     }
 }

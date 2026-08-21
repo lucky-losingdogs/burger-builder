@@ -11,12 +11,12 @@ public abstract class ManagerParent<T> : MonoBehaviour where T : UnityEngine.Obj
     //enable called by game manager to subscribe after game manager instance has been set up
     protected virtual void OnEnable()
     {
-        GameManager.OnLevelStart += HandleLevelStart;
+        LevelManager.OnLevelStart += HandleLevelStart;
     }
 
     protected virtual void OnDisable()
     {
-        GameManager.OnLevelStart -= HandleLevelStart;
+        LevelManager.OnLevelStart -= HandleLevelStart;
     }
 
     #endregion

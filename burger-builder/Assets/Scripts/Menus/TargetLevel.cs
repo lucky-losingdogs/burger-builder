@@ -32,7 +32,7 @@ public class TargetLevel : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         Debug.Log("Passing targetLevelIndex: " + m_targetLevelIndex);
-        GameManager.s_instance.SetSelectedLevel(m_targetLevelIndex);
+        LevelManager.s_instance.SetSelectedLevel(m_targetLevelIndex);
         
         //destroy this object afterwards
         Destroy(gameObject);

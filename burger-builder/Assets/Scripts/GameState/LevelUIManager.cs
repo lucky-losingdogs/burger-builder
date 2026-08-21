@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class GameUIManager : MonoBehaviour
+public class LevelUIManager : MonoBehaviour
 {
-    public static GameUIManager s_instance;
+    public static LevelUIManager s_instance;
 
     [SerializeField] private GameObject m_winMenu;
     [SerializeField] private GameObject m_failMenu;

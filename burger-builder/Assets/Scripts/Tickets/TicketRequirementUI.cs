@@ -13,14 +13,14 @@ public class TicketRequirementUI : MonoBehaviour
 
     private void OnEnable()
     {
-        GameManager.OnLevelStart += HandleLevelStart;
-        GameManager.OnTicketCleared += UpdateRequirementUI;
+        LevelManager.OnLevelStart += HandleLevelStart;
+        LevelManager.OnTicketCleared += UpdateRequirementUI;
     }
 
     private void OnDisable()
     {
-        GameManager.OnLevelStart -= HandleLevelStart;
-        GameManager.OnTicketCleared -= UpdateRequirementUI;
+        LevelManager.OnLevelStart -= HandleLevelStart;
+        LevelManager.OnTicketCleared -= UpdateRequirementUI;
     }
 
     private void HandleLevelStart(LevelData levelData)

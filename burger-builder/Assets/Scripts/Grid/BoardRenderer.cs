@@ -29,14 +29,14 @@ public class BoardRenderer : MonoBehaviour
 
     private void OnEnable()
     {
-        GameManager.OnTicketCleared += ClearAllTiles;
-        GameManager.OnLevelEnd += ClearAllTiles;
+        LevelManager.OnTicketCleared += ClearAllTiles;
+        LevelManager.OnLevelEnd += ClearAllTiles;
     }
     
     private void OnDisable()
     {
-        GameManager.OnTicketCleared -= ClearAllTiles;
-        GameManager.OnLevelEnd -= ClearAllTiles;
+        LevelManager.OnTicketCleared -= ClearAllTiles;
+        LevelManager.OnLevelEnd -= ClearAllTiles;
     }
 
     #endregion

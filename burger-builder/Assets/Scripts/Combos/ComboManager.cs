@@ -60,12 +60,12 @@ public class ComboManager : MonoBehaviour
 
     private void OnEnable()
     {
-        GameManager.OnTicketCleared += HandleTicketCleared;
+        LevelManager.OnTicketCleared += HandleTicketCleared;
     }
 
     private void OnDisable()
     {
-        GameManager.OnTicketCleared -= HandleTicketCleared;
+        LevelManager.OnTicketCleared -= HandleTicketCleared;
     }
 
     #endregion

@@ -7,9 +7,9 @@ using System;
 using UnityEditor;
 #endif
 
-public class GameManager : MonoBehaviour
+public class LevelManager : MonoBehaviour
 {
-    public static GameManager s_instance;
+    public static LevelManager s_instance;
 
     [SerializeField] private List<LevelData> m_allLevels = new List<LevelData>();
     private int m_currentLevel = 0;
@@ -57,8 +57,8 @@ public class GameManager : MonoBehaviour
             Debug.Log("Selected Level: " + m_selectedLevel);
             m_currentLevel = m_selectedLevel;
         }
-        
-        OnLevelStart?.Invoke(m_allLevels[m_currentLevel]);
+
+        HandleLevelStart();
     }
 
     private void OnEnable()
@@ -92,7 +92,7 @@ public class GameManager : MonoBehaviour
     public void HandleNextLevel()
     {
         //increment the current lvl index
-        m_currentLevel = Mathf.Clamp(m_currentLevel++, 0, m_allLevels.Count - 1);
+        m_currentLevel = Mathf.Clamp(m_currentLevel + 1, 0, m_allLevels.Count);
         StartLevel();
     }
 
@@ -106,8 +106,8 @@ public class GameManager : MonoBehaviour
     private void StartLevel()
     {
         ClearLevel();
-        OnLevelStart?.Invoke(m_allLevels[m_currentLevel]);
-        GameUIManager.s_instance.ToggleBothMenus(false);
+        HandleLevelStart();
+        LevelUIManager.s_instance.ToggleBothMenus(false);
     }
 
     private void ClearLevel()
@@ -121,15 +121,25 @@ public class GameManager : MonoBehaviour
     {
         int ticketReq = m_allLevels[m_currentLevel].GetTicketRequirement();
         if (m_ticketManager.GetCompletedTickets() >= ticketReq)
-            GameUIManager.s_instance.ToggleWinMenu(true);
+            LevelUIManager.s_instance.ToggleWinMenu(true);
         else
-            GameUIManager.s_instance.ToggleFailMenu(true);
+            LevelUIManager.s_instance.ToggleFailMenu(true);
 
         OnLevelEndEarly?.Invoke();
     }
 
+    private void HandleLevelStart()
+    {
+        Debug.Log(m_currentLevel);
+        if (m_currentLevel > m_allLevels.Count)
+            m_currentLevel = m_allLevels.Count;
+                
+        OnLevelStart?.Invoke(m_allLevels[m_currentLevel]);
+    }
+
     public TicketData GetCurrentTicket() => m_ticketManager.GetCurrentTicket();
     public void SetSelectedLevel(int index) => m_selectedLevel = index;
+    public int GetCurrentLevel() => m_currentLevel;
 
 #if UNITY_EDITOR
 

@@ -16,6 +16,7 @@ public class StartMenu : MenuParent
     [SerializeField] private float m_fadeDuration = 0.8f;
 
     public static event Action OnTitleLoaded;
+    public static event Action<int> OnContinueButtonPressed;
 
     private bool m_isFinishedFading = false;
     private TextMeshProUGUI m_titleUI;
@@ -47,6 +48,12 @@ public class StartMenu : MenuParent
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         StartCoroutine(C_GameStartTimer());
+    }
+
+    public void HandleContinueButton()
+    {
+        int highestLevel = SaveManager.s_instance.GetSaveData().highestLevel;
+        OnContinueButtonPressed?.Invoke(highestLevel);
     }
 
     #region Start Up Fading In

@@ -24,14 +24,14 @@ public class Timer : MonoBehaviour
 
     private void OnEnable()
     {
-        GameManager.OnLevelStart += SetTimer;
-        GameManager.OnLevelEnd += StopTimer;
+        LevelManager.OnLevelStart += SetTimer;
+        LevelManager.OnLevelEnd += StopTimer;
     }
 
     private void OnDisable()
     {
-        GameManager.OnLevelStart -= SetTimer;
-        GameManager.OnLevelEnd -= StopTimer;
+        LevelManager.OnLevelStart -= SetTimer;
+        LevelManager.OnLevelEnd -= StopTimer;
     }
 
     #endregion

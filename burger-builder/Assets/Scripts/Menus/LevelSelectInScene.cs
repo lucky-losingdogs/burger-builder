@@ -1,26 +1,23 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LevelSelectInScene : MenuParent
+public class LevelSelectInScene : MenuParent, ILoadableSaveData
 {
     [Header("Level Select")]
     [SerializeField] private GameObject m_levelButtonPrefab;
     [SerializeField] private Transform m_levelButtonParent;
     
-    private Button[] m_levelButtons;
+    private Button[] m_levelButtons = Array.Empty<Button>();
     [SerializeField] private List<LevelData> m_allLevels = new List<LevelData>();
 
     #region  Set up
-    
-    protected void Awake()
-    {
-        m_levelButtons = SpawnLevelButtons().ToArray();
-    }
 
     private List<Button> SpawnLevelButtons()
     {
         List<Button> tempButtonList = new List<Button>();
+        ClearLevelButtons();
 
         //for each level spawn a button
         for (int i = 0; i < m_allLevels.Count; i++)
@@ -48,7 +45,30 @@ public class LevelSelectInScene : MenuParent
     }
 
     //each button on click triggers the function and passes the index it is in the array as the level index
-    protected void OnEnable()
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        SaveManager.OnSaveLoaded += HandleSaveLoaded;
+        LevelManager.OnLevelEnd += Reset;
+    }
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+        SaveManager.OnSaveLoaded -= HandleSaveLoaded;
+        LevelManager.OnLevelEnd -= Reset;
+    }
+
+    public void HandleSaveLoaded(SaveData saveData)
+    {
+        int highestLevel = saveData.highestLevel;
+        m_allLevels = (this as ILoadableSaveData).GetList(highestLevel);
+        
+        m_levelButtons = SpawnLevelButtons().ToArray();
+        BindLevelButtons();
+    }
+    
+    private void BindLevelButtons()
     {
         for (int i = 0; i < m_levelButtons.Length; i++)
         {
@@ -57,12 +77,9 @@ public class LevelSelectInScene : MenuParent
         }
     }
 
-    protected void OnDisable()
+    private void OnDestroy()
     {
-        foreach (Button button in m_levelButtons)
-        {
-            button.onClick.RemoveAllListeners();
-        }
+        ClearLevelButtons();
     }
 
     #endregion
@@ -72,15 +89,25 @@ public class LevelSelectInScene : MenuParent
     protected virtual void OnButtonClick(int index)
     {
         Debug.Log("Switch to level: " + index);
-        GameManager.s_instance.SetSelectedLevel(index);
+        LevelManager.s_instance.SetSelectedLevel(index);
+    }
+
+    private void ClearLevelButtons()
+    {
+        foreach (Button button in m_levelButtons)
+        {
+            if (button == null)
+                continue;
+            
+            button.onClick.RemoveAllListeners();
+            Destroy(button.gameObject);
+        }
+        
+        m_levelButtons = Array.Empty<Button>();
     }
     
-#if UNITY_EDITOR
-
-    protected void OnValidate()
+    protected void Reset()
     {
-        m_allLevels = Utilities.LoadList<LevelData>("Levels");
+        ClearLevelButtons();
     }
-
-#endif
 }

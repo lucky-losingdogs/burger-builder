@@ -32,9 +32,9 @@ public class TicketManager : ManagerParent<TicketData>
     protected override void OnEnable()
     {
         base.OnEnable();
-        GameManager.OnLevelEndEarly += HandleLevelEndEarly;
-        GameManager.OnTicketCleared += NewTicket;
-        GameManager.OnLevelEnd += Reset;
+        LevelManager.OnLevelEndEarly += HandleLevelEndEarly;
+        LevelManager.OnTicketCleared += NewTicket;
+        LevelManager.OnLevelEnd += Reset;
 
         DragManager.OnItemDropped += CheckCompletedTicket;
     }
@@ -42,9 +42,9 @@ public class TicketManager : ManagerParent<TicketData>
     protected override void OnDisable()
     {
         base.OnDisable();
-        GameManager.OnLevelEndEarly -= HandleLevelEndEarly;
-        GameManager.OnTicketCleared -= NewTicket;
-        GameManager.OnLevelEnd -= Reset;
+        LevelManager.OnLevelEndEarly -= HandleLevelEndEarly;
+        LevelManager.OnTicketCleared -= NewTicket;
+        LevelManager.OnLevelEnd -= Reset;
         
         DragManager.OnItemDropped -= CheckCompletedTicket;
     }
@@ -138,7 +138,7 @@ public class TicketManager : ManagerParent<TicketData>
         
         if (CheckItemCount(boardRenderer, ticketItems) && CheckItemPositions(boardRenderer, ticketItems))
         {
-            GameManager.s_instance.HandleTicketCleared();
+            LevelManager.s_instance.HandleTicketCleared();
         }
     }
     
