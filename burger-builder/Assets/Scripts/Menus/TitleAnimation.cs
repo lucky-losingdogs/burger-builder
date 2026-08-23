@@ -71,7 +71,7 @@ public class TitleAnimation : MonoBehaviour
     {
         yield return new WaitUntil(() => m_isFinishedFading);
 
-        ExitMenu.EnableClicking();
+        MenuClicking.EnableClicking();
         
         if (TitleAnimationPlayed.s_instance != null)
             TitleAnimationPlayed.s_instance.SetTitlePlayed(true);

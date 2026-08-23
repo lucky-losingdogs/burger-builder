@@ -13,12 +13,12 @@ public class MenuParent : MonoBehaviour
 
     protected virtual void OnEnable()
     {
-        ExitMenu.OnClickOff += HandleClickOff;
+        MenuClicking.OnClick += HandleClick;
     }
 
     protected virtual void OnDisable()
     {
-        ExitMenu.OnClickOff -= HandleClickOff;
+        MenuClicking.OnClick -= HandleClick;
     }
 
     protected void Awake()
@@ -47,13 +47,12 @@ public class MenuParent : MonoBehaviour
     
     private void ResetTimeScale()
     {
-        Time.timeScale = 1;
-        Debug.Log(Time.timeScale);
+        GameTime.ReleasePause();
     }
     
     //when player clicks on background or back button,
     //set menus to the default menu display
-    public virtual void HandleClickOff()
+    public virtual void HandleClick()
     {
         DefaultDisplay();
     }

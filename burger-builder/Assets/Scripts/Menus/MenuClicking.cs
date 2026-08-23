@@ -3,11 +3,12 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
-public class ExitMenu : MonoBehaviour, IPointerClickHandler
+public class MenuClicking : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] private InputActionReference m_anyKeyboard;
+    [SerializeField] private bool m_keepKeyboardActive = false;
     
-    public static event Action OnClickOff;
+    public static event Action OnClick;
 
     private static bool m_clickingEnabled = false;
 
@@ -27,9 +28,10 @@ public class ExitMenu : MonoBehaviour, IPointerClickHandler
     //when the player clicks on the background invoke event
     public void OnPointerClick(PointerEventData eventData)
     {
+        Debug.Log("click");
         if (m_clickingEnabled)
         {
-            OnClickOff?.Invoke();
+            OnClick?.Invoke();
         }
     }
 
@@ -39,8 +41,9 @@ public class ExitMenu : MonoBehaviour, IPointerClickHandler
     {
         if (m_clickingEnabled)
         {
-            OnClickOff?.Invoke();
-            DisableKeyboard();
+            OnClick?.Invoke();
+            if (!m_keepKeyboardActive)
+                DisableKeyboard();
         }
     }
 

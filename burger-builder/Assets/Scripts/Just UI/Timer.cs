@@ -55,7 +55,10 @@ public class Timer : MonoBehaviour
     private void StopTimer()
     {
         if (m_timer != null)
+        {
             StopCoroutine(m_timer);
+            m_timer = null;
+        }
     }
 
     private void UpdateUI(float currentTime)
@@ -70,7 +73,7 @@ public class Timer : MonoBehaviour
         while (elapsedTime > 0)
         {
             yield return new WaitForSeconds(m_timeDecrease);
-
+            
             elapsedTime -= m_timeDecrease;
             UpdateUI(elapsedTime);
         }

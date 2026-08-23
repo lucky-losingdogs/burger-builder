@@ -12,7 +12,7 @@ public class PauseMenu : MenuParent
 
     private void Start()
     {
-        ExitMenu.EnableClicking();
+        MenuClicking.EnableClicking();
         StartDisplay();
     }
     
@@ -72,8 +72,9 @@ public class PauseMenu : MenuParent
     private void SetTimeScale(bool menuActive)
     {
         if (menuActive)
-            Time.timeScale = 0;
+            GameTime.RequestPause();
         else
-            Time.timeScale = 1;
+            GameTime.ReleasePause();
+        Debug.Log(Time.timeScale);
     }
 }

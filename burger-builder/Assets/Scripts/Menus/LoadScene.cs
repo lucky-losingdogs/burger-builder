@@ -41,7 +41,7 @@ public class LoadScene : MonoBehaviour
     public void StartLoading(int index)
     {
         m_loadingUI.SetActive(true);
-        Time.timeScale = 1;
+        GameTime.ReleasePause();
 
         m_targetSceneIndex = index;
         if (m_targetSceneIndex == SceneManager.GetActiveScene().buildIndex)
@@ -69,7 +69,7 @@ public class LoadScene : MonoBehaviour
     protected IEnumerator C_LoadAsync(int index)
     {
         //ensure time isn't paused
-        Time.timeScale = 1;
+        GameTime.ReleasePause();
 
         AsyncOperation loadAsync = SceneManager.LoadSceneAsync(index, LoadSceneMode.Additive);
         loadAsync.allowSceneActivation = false;

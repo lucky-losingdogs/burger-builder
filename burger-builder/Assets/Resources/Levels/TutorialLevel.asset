@@ -16,6 +16,7 @@ MonoBehaviour:
   difficultyRange: 01000000
   timeLimit: 30
   ticketRequirement: 5
+  cutscene: 1
   tickets:
   - {fileID: 11400000, guid: 2a6bbd61a4c93014782f82834e3094a7, type: 2}
   perks:

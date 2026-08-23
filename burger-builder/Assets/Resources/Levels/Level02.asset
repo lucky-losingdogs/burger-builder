@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d484d7eba9231e45a3cc4e4b43dab6b, type: 3}
   m_Name: Level02
   m_EditorClassIdentifier: 
+  level: 2
   difficultyRange: 01000000
   timeLimit: 45.2
   ticketRequirement: 5
+  cutscene: 0
   tickets:
   - {fileID: 11400000, guid: 2a6bbd61a4c93014782f82834e3094a7, type: 2}
   perks:

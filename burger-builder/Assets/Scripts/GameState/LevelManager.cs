@@ -16,11 +16,9 @@ public class LevelManager : MonoBehaviour
     private int m_selectedLevel = (int)NullIndex.NullLevel;
 
     private TicketManager m_ticketManager;
-    private BoardRenderer m_boardRenderer;
     private ComboManager m_comboManager;
     private PerkManager m_perkManager;
     private SpawnManager m_spawnManager;
-    private TicketRequirementUI m_ticketRequirementUI;
 
     public static event Action<LevelData> OnLevelStart;
     public static event Action OnLevelEnd;
@@ -41,10 +39,8 @@ public class LevelManager : MonoBehaviour
         s_instance = this;
         
         m_ticketManager = FindFirstObjectByType<TicketManager>();
-        m_boardRenderer = FindFirstObjectByType<BoardRenderer>();
         m_comboManager = FindFirstObjectByType<ComboManager>();
         m_spawnManager = FindFirstObjectByType<SpawnManager>();
-        m_ticketRequirementUI = FindFirstObjectByType<TicketRequirementUI>();
     }
 
     private void Start()

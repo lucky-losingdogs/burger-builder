@@ -15,6 +15,7 @@ public class LevelData : ScriptableObject
     [Range(5.0f, 60.0f)]
     [field: SerializeField] private float timeLimit;
     [field: SerializeField] private int ticketRequirement;
+    [field: SerializeField] private Cutscenes cutscene;
 
     [SerializeField] private TicketData[] tickets;
     [SerializeField] private PerkData[] perks;
@@ -27,6 +28,7 @@ public class LevelData : ScriptableObject
     public float GetTimeLimit() { return timeLimit; }
     public int GetTicketRequirement() { return ticketRequirement; }
     public float GetDifficulty() { return (float)difficultyRange.Average(); }
+    public Cutscenes GetCutscene() { return cutscene; }
 
 #if UNITY_EDITOR
 

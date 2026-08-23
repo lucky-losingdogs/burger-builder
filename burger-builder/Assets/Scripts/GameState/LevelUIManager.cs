@@ -52,12 +52,10 @@ public class LevelUIManager : MonoBehaviour
         if (show)
         {
             menu.SetActive(true);
-            Time.timeScale = 0.0f;
         }
         else
         {
             menu.SetActive(false);
-            Time.timeScale = 1.0f;
         }
     }
 }
