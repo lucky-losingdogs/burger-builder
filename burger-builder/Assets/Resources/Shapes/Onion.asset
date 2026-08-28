@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fae9ccbbe629e744be3daaeec923012, type: 3}
   m_Name: Onion
   m_EditorClassIdentifier: 
-  tile: {fileID: 11400000, guid: bbc9b64b4af6c884e9219c2dbccf65e2, type: 2}
-  ghostTile: {fileID: 0}
+  tile: {fileID: 11400000, guid: 5b12687876a4f6843b0baff9a7e3630b, type: 2}
+  ghostTile: {fileID: 11400000, guid: 045351b2878825948b6a194ee944f164, type: 2}
   ingredient: 3
   cells:
   - {x: 1, y: 0}

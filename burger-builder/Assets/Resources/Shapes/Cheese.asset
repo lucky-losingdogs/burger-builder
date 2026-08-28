@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fae9ccbbe629e744be3daaeec923012, type: 3}
   m_Name: Cheese
   m_EditorClassIdentifier: 
-  tile: {fileID: 11400000, guid: a19fd98f45487a0439d9f881b634f2ba, type: 2}
-  ghostTile: {fileID: 0}
+  tile: {fileID: 11400000, guid: fa1e5e05bc6587644bcbf45c10617dbb, type: 2}
+  ghostTile: {fileID: 11400000, guid: 00a7a2bade46fa148b75def65a3603a3, type: 2}
   ingredient: 6
   cells:
-  - {x: -1, y: 1}
-  - {x: 0, y: 1}
   - {x: 0, y: 0}
   - {x: 1, y: 0}
+  - {x: 1, y: -1}
+  - {x: 2, y: -1}
+  anchorOffset: {x: 0, y: 0, z: 0}

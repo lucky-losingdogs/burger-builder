@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5fae9ccbbe629e744be3daaeec923012, type: 3}
-  m_Name: Lettuce
+  m_Name: Pickle
   m_EditorClassIdentifier: 
-  tile: {fileID: 11400000, guid: 26a0b12f87c3ad540ac6e3e596406fa1, type: 2}
-  ghostTile: {fileID: 0}
+  tile: {fileID: 11400000, guid: d00606d610ddb344f8527a532c1ac36c, type: 2}
+  ghostTile: {fileID: 11400000, guid: 70176227c6447684980782dec435a6bc, type: 2}
   ingredient: 2
   cells:
   - {x: 2, y: 0}

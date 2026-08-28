@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fae9ccbbe629e744be3daaeec923012, type: 3}
   m_Name: Tomato
   m_EditorClassIdentifier: 
-  tile: {fileID: 11400000, guid: 5c553a970539aa34db46916a13dfd766, type: 2}
-  ghostTile: {fileID: 0}
+  tile: {fileID: 11400000, guid: e2e69de3507ca1a46b76df10439dffe8, type: 2}
+  ghostTile: {fileID: 11400000, guid: 79a8048c8ba2a404a9e585abe8e16e4c, type: 2}
   ingredient: 5
   cells:
   - {x: 1, y: 0}

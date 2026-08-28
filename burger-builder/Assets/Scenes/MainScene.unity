@@ -4556,7 +4556,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 5d10836135210934f9c72d79773d28a7, type: 2}
     - target: {fileID: 2085756221231952089, guid: a8274e757759e9b4ab5485fa75e4b889, type: 3}
       propertyPath: m_Name
-      value: Lettuce Spawner
+      value: Pickle Spawner
       objectReference: {fileID: 0}
     - target: {fileID: 2085756221231952089, guid: a8274e757759e9b4ab5485fa75e4b889, type: 3}
       propertyPath: m_IsActive
@@ -6694,6 +6694,7 @@ MonoBehaviour:
   m_listExtensionSize: 50
   m_draggablePrefab: {fileID: 3058843355679666389, guid: a7abe97d006dfc646b52e6468329ffdc, type: 3}
   m_boardRenderer: {fileID: 1720711214}
+  m_dragManager: {fileID: 383295005}
   m_spawnerObjects:
   - {fileID: 2975511448671687128}
   - {fileID: 1773704905}
@@ -8882,7 +8883,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1510360186
 MonoBehaviour:
   m_ObjectHideFlags: 0

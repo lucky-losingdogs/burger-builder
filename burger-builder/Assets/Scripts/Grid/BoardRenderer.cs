@@ -82,7 +82,7 @@ public class BoardRenderer : MonoBehaviour
             for (int i = 0; i < itemList.Count; i++)
             {
                 if (itemList[i] != null)
-                    StartCoroutine(C_WaitDestroyItem(itemList[i]));
+                    StartCoroutine(C_WaitHideItem(itemList[i]));
             }
         }
         
@@ -168,14 +168,12 @@ public class BoardRenderer : MonoBehaviour
         }
     }
 
-    public IEnumerator C_WaitDestroyItem(Item item)
+    public IEnumerator C_WaitHideItem(Item item)
     {
-        yield return new WaitWhile(ItemInUse);
-        Destroy(item.gameObject);
+        yield return new WaitWhile(() => m_itemInUse);
+        item.gameObject.SetActive(false);
         m_itemInUse = false;
     }
-
-    private bool ItemInUse() { return m_itemInUse; }
 
     public OverlappedTile GetCurrentOverlap() { return m_currentOverlap; }
 
@@ -208,7 +206,7 @@ public class BoardRenderer : MonoBehaviour
             {
                 ClearTiles(item);
                 CheckOverlappingTiles(item, position);
-                StartCoroutine(C_WaitDestroyItem(item));
+                StartCoroutine(C_WaitHideItem(item));
                 return;
             }
         }

@@ -45,12 +45,18 @@ public class DragManager : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
         m_currentItem = currentItem;
     }
 
+    public void BeginDraggingItem(PointerEventData eventData, Item currentItem)
+    {
+        m_currentItem = currentItem;
+    }
+
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (CheckRMB(eventData))
             return;
 
-        HandleClick(eventData.position);
+        if (m_currentItem == null)
+            HandleClick(eventData.position);
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -166,7 +172,7 @@ public class DragManager : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
         else //if no space was found, clear the item
         {
             m_boardRenderer.ClearTiles(m_currentItem);
-            StartCoroutine(m_boardRenderer.C_WaitDestroyItem(m_currentItem));
+            StartCoroutine(m_boardRenderer.C_WaitHideItem(m_currentItem));
         }
     }
 

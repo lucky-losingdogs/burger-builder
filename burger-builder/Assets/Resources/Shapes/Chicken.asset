@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fae9ccbbe629e744be3daaeec923012, type: 3}
   m_Name: Chicken
   m_EditorClassIdentifier: 
-  tile: {fileID: 11400000, guid: 2135ceb239ec0454794f5e9a9e1a8028, type: 2}
-  ghostTile: {fileID: 0}
+  tile: {fileID: 11400000, guid: 13dac75394fbf6d4a9608d67071a8af8, type: 2}
+  ghostTile: {fileID: 11400000, guid: a19b797d0b941534daa63219ead64ab2, type: 2}
   ingredient: 4
   cells:
   - {x: 1, y: 0}

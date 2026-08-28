@@ -8,6 +8,7 @@ public class SpawnManager : ManagerParent<ShapeData>
 
     [SerializeField] private GameObject m_draggablePrefab;
     [SerializeField] private BoardRenderer m_boardRenderer;
+    [SerializeField] private DragManager m_dragManager;
     [SerializeField] private List<GameObject> m_spawnerObjects;
 
     private ShapeData[] m_levelShapes;
@@ -29,6 +30,8 @@ public class SpawnManager : ManagerParent<ShapeData>
 
         if (m_boardRenderer == null)
             m_boardRenderer = FindFirstObjectByType<BoardRenderer>();
+        if (m_dragManager == null)
+            m_dragManager = FindFirstObjectByType<DragManager>();
 
         SetDictionary();
         HideSpawners();
@@ -130,15 +133,11 @@ public class SpawnManager : ManagerParent<ShapeData>
     
     #region Getters
 
-    public GameObject GetDraggablePrefab()
-    {
-        return m_draggablePrefab;
-    }
+    public GameObject GetDraggablePrefab() => m_draggablePrefab;
 
-    public BoardRenderer GetBoardRenderer()
-    {
-        return m_boardRenderer;
-    }
+    public BoardRenderer GetBoardRenderer() => m_boardRenderer;
+
+    public DragManager GetDragManager() => m_dragManager;
 
     #endregion
 }

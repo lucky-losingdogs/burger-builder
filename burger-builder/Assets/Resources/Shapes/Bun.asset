@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fae9ccbbe629e744be3daaeec923012, type: 3}
   m_Name: Bun
   m_EditorClassIdentifier: 
-  tile: {fileID: 11400000, guid: 290f1c45857d3e34a9e002bc7ea2b51e, type: 2}
-  ghostTile: {fileID: 0}
+  tile: {fileID: 11400000, guid: 1de002aec9d6b064a9410d35dfb9ca45, type: 2}
+  ghostTile: {fileID: 11400000, guid: 2eae9e0bfcb04294f931c7b485e97484, type: 2}
   ingredient: 0
   cells:
-  - {x: -1, y: 1}
-  - {x: 0, y: 1}
-  - {x: 1, y: 1}
-  - {x: 2, y: 1}
+  - {x: 0, y: 0}
+  - {x: 1, y: 0}
+  - {x: 2, y: 0}
+  - {x: 3, y: 0}
+  anchorOffset: {x: 0, y: 0, z: 0}
