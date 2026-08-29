@@ -32,6 +32,8 @@ public class LevelData : ScriptableObject
 
 #if UNITY_EDITOR
 
+    [field: SerializeField] private bool m_loadTickets = false;
+    
     private void OnValidate()
     {
         FillLevelData();
@@ -41,12 +43,12 @@ public class LevelData : ScriptableObject
     //load all the tickets scriptable objects
     //then return only the tickets with the level's difficulty
     //</summary>
-    private List<TicketData> LoadTickets()
+    private List<TicketData> GetDifficultyTickets()
     {
-        List<TicketData> m_allTickets = LoadAll<TicketData>("Tickets");
+        List<TicketData> allTickets = LoadAll<TicketData>("Tickets");
         List<TicketData> difficultyTickets = new List<TicketData>();
 
-        foreach (TicketData data in m_allTickets)
+        foreach (TicketData data in allTickets)
         {
             int difficulty = data.GetDifficulty();
             if (difficultyRange.Contains(difficulty))
@@ -58,6 +60,21 @@ public class LevelData : ScriptableObject
         return difficultyTickets;
     }
 
+    private List<TicketData> AddTickets(List<TicketData> difficultyTickets)
+    {
+        List<TicketData> result = tickets?.ToList() ?? new List<TicketData>();
+
+        foreach (TicketData ticket in difficultyTickets)
+        {
+            if (!result.Contains(ticket))
+            {
+                result.Add(ticket);
+            }
+        }
+
+        return result;
+    }
+
     private List<T> LoadAll<T>(string folderPath) where T : UnityEngine.Object
     {
         return Utilities.LoadList<T>(folderPath);
@@ -65,7 +82,12 @@ public class LevelData : ScriptableObject
 
     private void FillLevelData()
     {
-        tickets = LoadTickets().ToArray();
+        if (m_loadTickets)
+        {
+            tickets = AddTickets(GetDifficultyTickets()).ToArray();
+            m_loadTickets = false;
+        }
+        
         perks = LoadAll<PerkData>("Perks").ToArray();
     }
 

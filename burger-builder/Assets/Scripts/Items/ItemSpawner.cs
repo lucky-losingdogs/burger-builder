@@ -26,7 +26,6 @@ public class ItemSpawner : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
         //get variables from static manager
         m_boardRenderer = SpawnManager.s_instance.GetBoardRenderer();
         m_dragManager = SpawnManager.s_instance.GetDragManager();
-        Debug.Log(m_dragManager);
         
         m_originalCooldownDuration = m_cooldownDuration;
 

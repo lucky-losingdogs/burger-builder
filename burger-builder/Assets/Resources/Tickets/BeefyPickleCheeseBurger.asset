@@ -10,16 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 02bec0a94b9bb1f4ea2043ef9f424f15, type: 3}
-  m_Name: BasicBurger
+  m_Name: BeefyPickleCheeseBurger
   m_EditorClassIdentifier: 
   ticketItems:
-  - shape: {fileID: 11400000, guid: cb5840f65d93320478a4a28cd3043989, type: 2}
-    cells:
-    - {x: 0, y: 0, z: 0}
-    - {x: 1, y: 0, z: 0}
-    - {x: 2, y: 0, z: 0}
-    position: {x: 0, y: 4, z: 0}
-    rotation: 0
   - shape: {fileID: 11400000, guid: cb5840f65d93320478a4a28cd3043989, type: 2}
     cells:
     - {x: 0, y: 0, z: 0}
@@ -33,15 +26,19 @@ MonoBehaviour:
     - {x: 0, y: -1, z: 0}
     - {x: 1, y: -1, z: 0}
     - {x: 2, y: -1, z: 0}
-    position: {x: 0, y: 3, z: 0}
-    rotation: 0
-  - shape: {fileID: 11400000, guid: 58896606b8828f347ba2ebf71090bc21, type: 2}
-    cells:
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: -1, z: 0}
-    - {x: 1, y: -1, z: 0}
-    - {x: 2, y: -1, z: 0}
     position: {x: 3, y: 2, z: 0}
     rotation: 2
+  - shape: {fileID: 11400000, guid: e0ca57faf7bee44449d137b7b73ef6de, type: 2}
+    cells:
+    - {x: 0, y: 0, z: 0}
+    - {x: 1, y: 0, z: 0}
+    - {x: 2, y: -1, z: 0}
+    position: {x: 1, y: 2, z: 0}
+    rotation: 0
+  - shape: {fileID: 11400000, guid: 5d10836135210934f9c72d79773d28a7, type: 2}
+    cells:
+    - {x: 0, y: 0, z: 0}
+    position: {x: 0, y: 2, z: 0}
+    rotation: 0
   sprite: {fileID: 21300000, guid: 336d0946522c164448428d23bafb9f9a, type: 3}
-  difficulty: 2
+  difficulty: 3

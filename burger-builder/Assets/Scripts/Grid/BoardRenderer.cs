@@ -88,13 +88,31 @@ public class BoardRenderer : MonoBehaviour
         
         m_itemMap.ResetMap();
     }
+    
+    public void HandleOverlaps(OverlappedTile overlap)
+    {
+        //check if there's overlaps 
+        if (overlap.GetOverlapping())
+        {
+            //get the top overlapping item from the item map
+            overlap.GetPosition(0);
+            Item topItem = m_itemMap.GetTopItem(overlap.GetPosition(0));
+            if (topItem == null)
+                return;
+
+            //get the ghost tile from the top overlapping item
+            Tile ghostTile = topItem.GetGhostTile();
+            //set ghost tile in the overlapped positions using the ghost tile from the item
+            SetGhostTile(overlap.GetPositions(), ghostTile);
+        }
+    }
 
     //sets overlapping tiles to the ghost tile to indicate where overlapping tiles are
-    public void SetGhostTile(List<Vector3Int> cellPositions)
+    private void SetGhostTile(List<Vector3Int> cellPositions, Tile ghostTile)
     {
         foreach (Vector3Int position in cellPositions)
         {
-            m_tilemap.SetTile(position, m_ghostTile);
+            m_tilemap.SetTile(position, ghostTile);
         }
     }
 

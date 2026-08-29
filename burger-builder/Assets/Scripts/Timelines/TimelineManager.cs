@@ -86,7 +86,7 @@ public class TimelineManager : MonoBehaviour
     {
         m_cutsceneCanvas.gameObject.SetActive(false);
         GameTime.ReleasePause();
-        Debug.Log(m_otherCutscenePlayed);
+        
         if (m_otherCutscenePlayed)
         {
             m_otherCutscenePlayed = false;

@@ -123,10 +123,7 @@ public class DragManager : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
 
     private void CheckOverlap(OverlappedTile overlap)
     {
-        if (overlap.GetOverlapping())
-        {
-            m_boardRenderer.SetGhostTile(overlap.GetPositions());
-        }
+        m_boardRenderer.HandleOverlaps(overlap);
     }
 
     private void CheckOverlapsOnDrop(PointerEventData eventData)

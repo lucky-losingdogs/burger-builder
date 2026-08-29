@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class Item : MonoBehaviour
 {
@@ -29,6 +30,8 @@ public class Item : MonoBehaviour
     {
         m_structure.Rotate(clockwise);
     }
+
+    public Tile GetGhostTile() { return m_structure.shape.GetGhostTile(); }
 
     #endregion
 }

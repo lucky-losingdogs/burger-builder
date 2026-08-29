@@ -36,7 +36,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -612.0447, y: 48.624542}
-  m_SizeDelta: {x: 300, y: 300}
+  m_SizeDelta: {x: 128, y: 88}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3575520564603417168
 CanvasRenderer:
@@ -91,3 +91,4 @@ MonoBehaviour:
   m_shape: {fileID: 11400000, guid: cb5840f65d93320478a4a28cd3043989, type: 2}
   m_draggablePrefab: {fileID: 3058843355679666389, guid: a7abe97d006dfc646b52e6468329ffdc, type: 3}
   m_cooldownDuration: 1.5
+  m_itemLimit: 6

@@ -9,7 +9,6 @@ public class TicketData : ScriptableObject
 {
     [field: SerializeField] private ItemStructure[] ticketItems;
     [field: SerializeField] private Sprite sprite;
-    [field: SerializeField] private Sprite diagramSprite;
     [Range(1, 5)]
     [field: SerializeField] private int difficulty;
 

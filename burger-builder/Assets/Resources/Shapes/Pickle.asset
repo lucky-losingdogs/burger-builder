@@ -16,8 +16,5 @@ MonoBehaviour:
   ghostTile: {fileID: 11400000, guid: 70176227c6447684980782dec435a6bc, type: 2}
   ingredient: 2
   cells:
-  - {x: 2, y: 0}
-  - {x: 0, y: -1}
-  - {x: 1, y: -1}
-  - {x: 2, y: -1}
-  anchorOffset: {x: 2, y: 0, z: 0}
+  - {x: 0, y: 0}
+  anchorOffset: {x: 0, y: 0, z: 0}

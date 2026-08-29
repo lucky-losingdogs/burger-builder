@@ -123,6 +123,7 @@ public class ComboManager : MonoBehaviour
         {
             //increase perk requirement to be greater than combo
             m_currentPerkRequirement += m_perkComboRequirement + m_perkRequirementIncrement;
+            Debug.Log(m_currentPerkRequirement);
             OnPerkAchieved?.Invoke(comboValue);
             UpdateUIMax();
         }

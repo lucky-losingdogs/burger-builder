@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02bec0a94b9bb1f4ea2043ef9f424f15, type: 3}
+  m_Name: MessBowl
+  m_EditorClassIdentifier: 
+  ticketItems:
+  - shape: {fileID: 11400000, guid: b3e1ab84d77609345914c7f770a7c4b7, type: 2}
+    cells:
+    - {x: 1, y: 0, z: 0}
+    - {x: 2, y: 0, z: 0}
+    - {x: 1, y: -1, z: 0}
+    - {x: 2, y: -1, z: 0}
+    position: {x: 1, y: 1, z: 0}
+    rotation: 0
+  - shape: {fileID: 11400000, guid: 58896606b8828f347ba2ebf71090bc21, type: 2}
+    cells:
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: -1, z: 0}
+    - {x: 1, y: -1, z: 0}
+    - {x: 2, y: -1, z: 0}
+    position: {x: 3, y: 3, z: 0}
+    rotation: 2
+  - shape: {fileID: 11400000, guid: 8cc5de486f7159146ab90e5580c6b81a, type: 2}
+    cells:
+    - {x: 1, y: 0, z: 0}
+    - {x: 0, y: -1, z: 0}
+    - {x: 1, y: -1, z: 0}
+    - {x: 2, y: -1, z: 0}
+    - {x: 2, y: 0, z: 0}
+    position: {x: 1, y: 2, z: 0}
+    rotation: 1
+  - shape: {fileID: 11400000, guid: e0ca57faf7bee44449d137b7b73ef6de, type: 2}
+    cells:
+    - {x: 0, y: 0, z: 0}
+    - {x: 1, y: 0, z: 0}
+    - {x: 2, y: -1, z: 0}
+    position: {x: 2, y: 2, z: 0}
+    rotation: 2
+  - shape: {fileID: 11400000, guid: 5d10836135210934f9c72d79773d28a7, type: 2}
+    cells:
+    - {x: 0, y: 0, z: 0}
+    position: {x: 1, y: 3, z: 0}
+    rotation: 0
+  - shape: {fileID: 11400000, guid: 5d10836135210934f9c72d79773d28a7, type: 2}
+    cells:
+    - {x: 0, y: 0, z: 0}
+    position: {x: 2, y: 3, z: 0}
+    rotation: 0
+  sprite: {fileID: 21300000, guid: 336d0946522c164448428d23bafb9f9a, type: 3}
+  difficulty: 3
