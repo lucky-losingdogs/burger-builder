@@ -18,3 +18,5 @@ MonoBehaviour:
   cells:
   - {x: 0, y: 0}
   anchorOffset: {x: 0, y: 0, z: 0}
+  symmetricalRotations:
+  - symmetricalRotations: 00000000010000000200000003000000

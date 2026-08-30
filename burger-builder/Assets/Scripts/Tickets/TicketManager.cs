@@ -219,7 +219,26 @@ public class TicketManager : ManagerParent<TicketData>
     private bool ItemChecker(Item boardItem, ItemStructure ticketItem)
     {
         return boardItem != null && ticketItem.shape == boardItem.GetShape() &&
-               ticketItem.rotation == boardItem.GetRotation();
+               CheckSymmetricalRotations(boardItem, ticketItem);
+    }
+
+    private bool CheckSymmetricalRotations(Item boardItem, ItemStructure ticketItem)
+    {
+        int ticketRot = ticketItem.rotation;
+        int boardRot = boardItem.GetRotation();
+
+        if (ticketRot == boardRot)
+            return true;
+
+        foreach (int[] symmetricalRots in boardItem.GetSymmetricalRotations())
+        {
+            if (symmetricalRots.Contains(boardRot) && symmetricalRots.Contains(ticketRot))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
     
     #endregion

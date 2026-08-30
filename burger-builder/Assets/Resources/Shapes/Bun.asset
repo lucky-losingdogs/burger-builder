@@ -19,5 +19,7 @@ MonoBehaviour:
   - {x: 0, y: 0}
   - {x: 1, y: 0}
   - {x: 2, y: 0}
-  - {x: 3, y: 0}
   anchorOffset: {x: 0, y: 0, z: 0}
+  symmetricalRotations:
+  - symmetricalRotations: 0000000002000000
+  - symmetricalRotations: 0100000003000000

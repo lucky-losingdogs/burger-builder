@@ -32,6 +32,8 @@ public class Item : MonoBehaviour
     }
 
     public Tile GetGhostTile() { return m_structure.shape.GetGhostTile(); }
+    
+    public int[][] GetSymmetricalRotations() { return m_structure.shape.GetSymmetricalRotations(); }
 
     #endregion
 }
