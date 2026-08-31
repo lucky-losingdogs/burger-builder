@@ -14,16 +14,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   level: 0
   difficultyRange: 01000000
-  timeLimit: 30
+  timeLimit: 60
   ticketRequirement: 5
-  cutscene: 0
+  cutscene: 1
   tickets:
   - {fileID: 11400000, guid: 9be198ae29949f646bde6629d36c34ad, type: 2}
   - {fileID: 11400000, guid: 1b500a518e8ece248b5d27e9b28f9cca, type: 2}
-  - {fileID: 11400000, guid: 1eb622f0d27a2734b875721fb9439fde, type: 2}
   perks:
+  - {fileID: 11400000, guid: e7a857240137e4f4cb43fca450aeba73, type: 2}
   - {fileID: 11400000, guid: 29a76d7cd749aa846a6e7cc9acf1fe89, type: 2}
-  - {fileID: 11400000, guid: 8ff2b80b678fe784995ed13fe82da37f, type: 2}
+  - {fileID: 11400000, guid: 7d942d486040bb944b3cbc2979e1a607, type: 2}
+  - {fileID: 11400000, guid: 17a312bdd14a83c45b0779c22c84a04e, type: 2}
+  - {fileID: 11400000, guid: 34541a42a3b33d54eadcf4d8912f5df1, type: 2}
+  - {fileID: 11400000, guid: 4f3787d85e3336b44898f79ede560024, type: 2}
+  - {fileID: 11400000, guid: bf8868682aad1764aa668556e718b8fb, type: 2}
+  - {fileID: 11400000, guid: d739e35e43a834a4cb60e8a3a55664eb, type: 2}
+  - {fileID: 11400000, guid: 36c49bf8fe3e4964f8aaf18c81a17583, type: 2}
+  - {fileID: 11400000, guid: 38c8a701275474843855d949451621ff, type: 2}
+  - {fileID: 11400000, guid: 1a2ba4515314cf24484209d9b75f9811, type: 2}
   shapes:
   - {fileID: 11400000, guid: cb5840f65d93320478a4a28cd3043989, type: 2}
   - {fileID: 11400000, guid: 58896606b8828f347ba2ebf71090bc21, type: 2}

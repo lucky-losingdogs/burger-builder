@@ -43,5 +43,5 @@ MonoBehaviour:
     - {x: 2, y: -1, z: 0}
     position: {x: 2, y: 2, z: 0}
     rotation: 1
-  sprite: {fileID: 21300000, guid: 336d0946522c164448428d23bafb9f9a, type: 3}
+  sprite: {fileID: 21300000, guid: e3b33f900be8828429e284d2680597eb, type: 3}
   difficulty: 3

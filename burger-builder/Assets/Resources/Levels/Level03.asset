@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d484d7eba9231e45a3cc4e4b43dab6b, type: 3}
+  m_Name: Level03
+  m_EditorClassIdentifier: 
+  level: 3
+  difficultyRange: 0200000003000000
+  timeLimit: 90
+  ticketRequirement: 10
+  cutscene: 0
+  tickets:
+  - {fileID: 11400000, guid: d9e96ae99dd58b248a799e050f587ba3, type: 2}
+  - {fileID: 11400000, guid: 7ad4fbe3dc9c83c4cb0be01f91eddac4, type: 2}
+  - {fileID: 11400000, guid: 6259ad1a5e5aa214698da8797779990d, type: 2}
+  - {fileID: 11400000, guid: 3cc0e8066d9100b418c7157dc728ec09, type: 2}
+  - {fileID: 11400000, guid: 7babd5a71867b6b418b9f9ac8134120b, type: 2}
+  perks:
+  - {fileID: 11400000, guid: e7a857240137e4f4cb43fca450aeba73, type: 2}
+  - {fileID: 11400000, guid: 29a76d7cd749aa846a6e7cc9acf1fe89, type: 2}
+  - {fileID: 11400000, guid: 7d942d486040bb944b3cbc2979e1a607, type: 2}
+  - {fileID: 11400000, guid: 17a312bdd14a83c45b0779c22c84a04e, type: 2}
+  - {fileID: 11400000, guid: 34541a42a3b33d54eadcf4d8912f5df1, type: 2}
+  - {fileID: 11400000, guid: 4f3787d85e3336b44898f79ede560024, type: 2}
+  - {fileID: 11400000, guid: bf8868682aad1764aa668556e718b8fb, type: 2}
+  - {fileID: 11400000, guid: d739e35e43a834a4cb60e8a3a55664eb, type: 2}
+  - {fileID: 11400000, guid: 36c49bf8fe3e4964f8aaf18c81a17583, type: 2}
+  - {fileID: 11400000, guid: 38c8a701275474843855d949451621ff, type: 2}
+  - {fileID: 11400000, guid: 1a2ba4515314cf24484209d9b75f9811, type: 2}
+  shapes:
+  - {fileID: 11400000, guid: cb5840f65d93320478a4a28cd3043989, type: 2}
+  - {fileID: 11400000, guid: 58896606b8828f347ba2ebf71090bc21, type: 2}
+  - {fileID: 11400000, guid: e0ca57faf7bee44449d137b7b73ef6de, type: 2}
+  - {fileID: 11400000, guid: 8cc5de486f7159146ab90e5580c6b81a, type: 2}
+  m_loadTickets: 0

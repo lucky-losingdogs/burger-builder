@@ -11,8 +11,10 @@ public class ComboManager : MonoBehaviour
     
     [Header("Perks")]
     [SerializeField] private float m_perkComboRequirement = 3.0f; //req at beginning
-    [SerializeField] private float m_perkRequirementIncrement = 0.3f;
+    [SerializeField] private float m_perkRequirementIncrement = 1f;
+    [SerializeField] private float m_perkRequirementIncrementMultiplier = 1.5f;
     private float m_currentPerkRequirement = 0; //changes through level
+    private float m_currentPerkRequirementIncrement = 0; //changes through level
 
     public static event Action<float> OnPerkAchieved;
 
@@ -48,6 +50,7 @@ public class ComboManager : MonoBehaviour
             Debug.LogError("ComboUIManager not found");
 
         m_currentPerkRequirement = m_perkComboRequirement;
+        m_currentPerkRequirementIncrement = m_perkRequirementIncrement;
 
         m_originalComboTimeLimit = m_comboTimeLimit;
         m_originalComboDecrement = m_comboDecrement;
@@ -62,12 +65,14 @@ public class ComboManager : MonoBehaviour
     {
         LevelManager.OnTicketCleared += HandleTicketCleared;
         LevelManager.OnTicketsCleared += HandleTicketsCleared;
+        LevelManager.OnLevelEnd += Reset;
     }
 
     private void OnDisable()
     {
         LevelManager.OnTicketCleared -= HandleTicketCleared;
         LevelManager.OnTicketsCleared -= HandleTicketsCleared;
+        LevelManager.OnLevelEnd -= Reset;
     }
 
     #endregion
@@ -122,10 +127,12 @@ public class ComboManager : MonoBehaviour
         if (comboValue >= m_currentPerkRequirement)
         {
             //increase perk requirement to be greater than combo
-            m_currentPerkRequirement += m_perkComboRequirement + m_perkRequirementIncrement;
-            Debug.Log(m_currentPerkRequirement);
-            OnPerkAchieved?.Invoke(comboValue);
+            m_currentPerkRequirement += m_perkComboRequirement + m_currentPerkRequirementIncrement;
+            m_currentPerkRequirementIncrement *= m_perkRequirementIncrementMultiplier;
+            
             UpdateUIMax();
+            
+            OnPerkAchieved?.Invoke(comboValue);
         }
     }
 
@@ -260,6 +267,26 @@ public class ComboManager : MonoBehaviour
 
         m_currentCombo = 0;
         m_currentPerkRequirement = m_perkComboRequirement; 
+        c_cooldownTimer = null;
+    }
+
+    private void Reset()
+    {
+        m_UIManager.Reset();
+        
+        m_currentPerkRequirement = 0;
+        m_currentPerkRequirementIncrement = 0;
+        m_clearedTickets = 0;
+        m_comboTimer = 0.0f;
+        m_currentCombo = 0.0f;
+        m_multiplier = 1.0f;
+        
+        if (c_comboTimer != null)
+            StopCoroutine(c_comboTimer);
+        c_comboTimer = null;
+        
+        if (c_cooldownTimer != null)
+            StopCoroutine(c_cooldownTimer);
         c_cooldownTimer = null;
     }
 }

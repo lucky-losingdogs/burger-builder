@@ -98,7 +98,7 @@ public class TimelineManager : MonoBehaviour
 
     private void PlayStartScene()
     {
-        Debug.Log($"Play Start Scene: {m_director.playableAsset.name}");
+        //Debug.Log($"Play Start Scene: {m_director.playableAsset.name}");
         PlayCutscene(GetCutscene(Cutscenes.RequiredTickets));
     }
 }

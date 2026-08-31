@@ -45,4 +45,12 @@ public class ComboUIManager : MonoBehaviour
         m_perkRequirement = requirement;
         m_barImage.fillAmount = 0.05f;
     }
+
+    public void Reset()
+    {
+        m_barImage.fillAmount = 0.05f;
+        m_perkRequirement = 0;
+        m_comboAtPerk = 0.0f;
+        m_currentCombo = 0.0f;
+    }
 }

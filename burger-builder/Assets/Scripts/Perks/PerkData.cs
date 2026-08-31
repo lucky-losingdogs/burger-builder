@@ -10,13 +10,13 @@ public class PerkData : ScriptableObject
 {
     [field: SerializeField] private string name;
     [field: SerializeField] private PerkTypes perkType;
-    [Range(3, 100)] [field: SerializeField] private float rank;
+    [Range(3, 10)] [field: SerializeField] private int rank;
     [field: SerializeField] private float duration;
     [field: SerializeField] private float value;
     
     public PerkTypes GetPerkType() => perkType;
     public string GetName() => name;
-    public float GetRank() => rank;
+    public int GetRank() => rank;
     public float GetDuration() => duration;
     public float GetValue() => value;
     

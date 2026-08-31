@@ -12,7 +12,6 @@ public class LevelData : ScriptableObject
     [field: SerializeField] private int level;
     [Range(1, 5)]
     [field: SerializeField] private int[] difficultyRange;
-    [Range(5.0f, 60.0f)]
     [field: SerializeField] private float timeLimit;
     [field: SerializeField] private int ticketRequirement;
     [field: SerializeField] private Cutscenes cutscene;

@@ -33,13 +33,14 @@ public class Utilities
     //remove the rest of the list after the trim root
     public static List<T> TrimExcess<T>(List<T> list, int trimRoot) where T : UnityEngine.Object
     {
-        if (list.Count < trimRoot)
+        if (list.Count <= trimRoot)
             return list;
-        
-        for (int i = trimRoot; i < list.Count; i++)
+
+        for (int i = list.Count - 1; i >= trimRoot; i--)
         {
             list.RemoveAt(i);
         }
+
         return list;
     }
 
