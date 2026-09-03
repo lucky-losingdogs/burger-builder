@@ -44,4 +44,9 @@ For downloading the Unity project from this repository please follow these instr
 ---
 
 ## Credits
-Credits for assets and audio used in the preview video can be found in a separate folder named [CREDITS](burger-builder/Credits).
+Credits for assets and audio used in the preview video can be found in a separate folder named [CREDITS](Documents/Credits).
+
+---
+
+## Other Documentation
+Some of the design plans for the prototype were created using Miro, and can be viewed in the folder named [Miro](Documents/Miro).
