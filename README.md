@@ -13,7 +13,7 @@ It was made in Unity using C#.
 
 ## Video
 
-[![Preview of Tower of Demetria on YouTube](https://img.youtube.com/vi/lGnFYO0usFQ/0.jpg)](https://www.youtube.com/watch?v=lGnFYO0usFQ)
+[![Preview of Burger Builder on YouTube](https://img.youtube.com/vi/lGnFYO0usFQ/0.jpg)](https://www.youtube.com/watch?v=lGnFYO0usFQ)
 
 ---
 
